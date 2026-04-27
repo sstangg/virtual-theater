@@ -7,10 +7,13 @@ import javax.swing.JPanel;
 
 import java.util.HashMap;
 
+import front_end.TicketBooking.*;
+
 public class TheaterFrame extends JFrame {
     // Constants for the card layout
     public static final String CARD_WELCOME = "welcome";
     public static final String CARD_THEATER_LOBBY = "theaterLobby";
+    public static final String CARD_SEARCH_MOVIES = "searchMovies";
 
     // Cached variables
     private String userName;
@@ -28,19 +31,22 @@ public class TheaterFrame extends JFrame {
         // Create the panels for the cards
         JPanel welcomePanel = new WelcomePanel(this);
         JPanel theaterLobbyPanel = new TheaterLobby(this);
+        JPanel searchMoviesPanel = new SearchMovies(this);
 
         // Add the panels to the cardLayout
         cards.add(welcomePanel, CARD_WELCOME);
         cards.add(theaterLobbyPanel, CARD_THEATER_LOBBY);
+        cards.add(searchMoviesPanel, CARD_SEARCH_MOVIES);
 
         // Add the refreshable panels to the map
         refreshablePanels.put(CARD_THEATER_LOBBY, (IRefreshable) theaterLobbyPanel);
+        refreshablePanels.put(CARD_SEARCH_MOVIES, (IRefreshable) searchMoviesPanel);
      
         // Add the cardLayout to the frame
         add(cards);
 
         // Show the welcome panel by default
-        cardLayout.show(cards, CARD_WELCOME);
+        cardLayout.show(cards, CARD_SEARCH_MOVIES);
     }
 
     public void showCard(String name) {
