@@ -1,0 +1,78 @@
+package front_end;
+
+import java.awt.CardLayout;
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+
+import java.util.HashMap;
+
+import front_end.TicketBooking.*;
+
+public class TheaterFrame extends JFrame {
+    // Constants for the card layout
+    public static final String CARD_WELCOME = "welcome";
+    public static final String CARD_THEATER_LOBBY = "theaterLobby";
+    public static final String CARD_SEARCH_MOVIES = "searchMovies";
+    public static final String CARD_SEAT_CHART = "seatChart";
+
+    // Cached variables
+    private String userName;
+
+    private final CardLayout cardLayout = new CardLayout();
+    private final JPanel cards = new JPanel(cardLayout);
+    private final HashMap<String, IRefreshable> refreshablePanels = new HashMap<>();
+    // Holds an empty movie initially
+    private final SeatChart seatChartPanel = new SeatChart(this, new String[] { "", "", "", "", "", "", "" });
+
+    public TheaterFrame() {
+        super("Virtual Theater");
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setSize(800, 1000);
+        setLocationByPlatform(true);
+
+        // Create the panels for the cards
+        JPanel welcomePanel = new WelcomePanel(this);
+        JPanel theaterLobbyPanel = new TheaterLobby(this);
+        JPanel searchMoviesPanel = new SearchMovies(this);
+
+        // Add the panels to the cardLayout
+        cards.add(welcomePanel, CARD_WELCOME);
+        cards.add(theaterLobbyPanel, CARD_THEATER_LOBBY);
+        cards.add(searchMoviesPanel, CARD_SEARCH_MOVIES);
+        cards.add(seatChartPanel, CARD_SEAT_CHART);
+
+        // Add the refreshable panels to the map
+        refreshablePanels.put(CARD_THEATER_LOBBY, (IRefreshable) theaterLobbyPanel);
+        refreshablePanels.put(CARD_SEARCH_MOVIES, (IRefreshable) searchMoviesPanel);
+     
+        // Add the cardLayout to the frame
+        add(cards);
+
+        // Show the welcome panel by default
+        cardLayout.show(cards, CARD_SEARCH_MOVIES);
+    }
+
+    public void showCard(String name) {
+        // Refresh the cache information of the panel if it is refreshable
+        if (refreshablePanels.containsKey(name)) {
+            refreshablePanels.get(name).refreshCache();
+        }
+
+        // Show the new card
+        cardLayout.show(cards, name);
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public void openSeatChart(String[] movie) {
+        seatChartPanel.setMovie(movie);
+        cardLayout.show(cards, CARD_SEAT_CHART);
+    }
+}
