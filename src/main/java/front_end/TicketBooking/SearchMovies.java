@@ -43,6 +43,8 @@ public class SearchMovies extends JPanel implements IRefreshable {
     };
     private ArrayList<String[]> filteredMovies = new ArrayList<>();
 
+    private String[] selectedMovie;
+
     private JTable moviesTable;
     private JScrollPane moviesTableScrollPane;
     private JTextArea movieDescriptionArea;
@@ -265,6 +267,8 @@ public class SearchMovies extends JPanel implements IRefreshable {
             Object desc = model.getValueAt(modelRow, DESCRIPTION_MODEL_COLUMN);
             Object showtimes = model.getValueAt(modelRow, SHOWTIMES_MODEL_COLUMN);
 
+            selectedMovie = new String[] { (String) name, (String) location, (String) rated , (String) year,  (String) runtime, (String) desc, "" };
+
             String descriptionText = ""
                     + "Movie Name: " + (name != null ? name.toString() : "") + "\n"
                     + "Release Year: " + (year != null ? year.toString() : "") + "\n"
@@ -284,6 +288,10 @@ public class SearchMovies extends JPanel implements IRefreshable {
                 for (String time : times) {
                     JButton timeButton = new JButton(time);
                     // TODO: Add functionality to the showtime buttons to go to seat chart
+                    timeButton.addActionListener(actionEvent -> {
+                        selectedMovie[6] = time;
+                        frame.openSeatChart(selectedMovie);
+                    });
                     showtimesPanel.add(timeButton);
                 }
             }

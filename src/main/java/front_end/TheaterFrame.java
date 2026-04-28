@@ -14,6 +14,7 @@ public class TheaterFrame extends JFrame {
     public static final String CARD_WELCOME = "welcome";
     public static final String CARD_THEATER_LOBBY = "theaterLobby";
     public static final String CARD_SEARCH_MOVIES = "searchMovies";
+    public static final String CARD_SEAT_CHART = "seatChart";
 
     // Cached variables
     private String userName;
@@ -46,7 +47,7 @@ public class TheaterFrame extends JFrame {
         add(cards);
 
         // Show the welcome panel by default
-        cardLayout.show(cards, CARD_WELCOME);
+        cardLayout.show(cards, CARD_SEARCH_MOVIES);
     }
 
     public void showCard(String name) {
@@ -65,5 +66,11 @@ public class TheaterFrame extends JFrame {
 
     public void setUserName(String userName) {
         this.userName = userName;
+    }
+
+    public void openSeatChart(String[] movie) {
+        SeatChart seatChart = new SeatChart(this, movie);
+        cards.add(seatChart, CARD_SEAT_CHART);
+        cardLayout.show(cards, CARD_SEAT_CHART);
     }
 }
