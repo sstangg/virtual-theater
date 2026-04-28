@@ -25,7 +25,7 @@ public class TheaterFrame extends JFrame {
     public TheaterFrame() {
         super("Virtual Theater");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(800, 600);
+        setSize(800, 1000);
         setLocationByPlatform(true);
 
         // Create the panels for the cards
@@ -46,7 +46,7 @@ public class TheaterFrame extends JFrame {
         add(cards);
 
         // Show the welcome panel by default
-        cardLayout.show(cards, CARD_SEARCH_MOVIES);
+        cardLayout.show(cards, CARD_WELCOME);
     }
 
     public void showCard(String name) {
