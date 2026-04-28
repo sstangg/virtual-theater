@@ -22,6 +22,8 @@ public class TheaterFrame extends JFrame {
     private final CardLayout cardLayout = new CardLayout();
     private final JPanel cards = new JPanel(cardLayout);
     private final HashMap<String, IRefreshable> refreshablePanels = new HashMap<>();
+    // Holds an empty movie initially
+    private final SeatChart seatChartPanel = new SeatChart(this, new String[] { "", "", "", "", "", "", "" });
 
     public TheaterFrame() {
         super("Virtual Theater");
@@ -38,6 +40,7 @@ public class TheaterFrame extends JFrame {
         cards.add(welcomePanel, CARD_WELCOME);
         cards.add(theaterLobbyPanel, CARD_THEATER_LOBBY);
         cards.add(searchMoviesPanel, CARD_SEARCH_MOVIES);
+        cards.add(seatChartPanel, CARD_SEAT_CHART);
 
         // Add the refreshable panels to the map
         refreshablePanels.put(CARD_THEATER_LOBBY, (IRefreshable) theaterLobbyPanel);
@@ -69,8 +72,7 @@ public class TheaterFrame extends JFrame {
     }
 
     public void openSeatChart(String[] movie) {
-        SeatChart seatChart = new SeatChart(this, movie);
-        cards.add(seatChart, CARD_SEAT_CHART);
+        seatChartPanel.setMovie(movie);
         cardLayout.show(cards, CARD_SEAT_CHART);
     }
 }

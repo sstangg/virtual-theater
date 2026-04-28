@@ -220,6 +220,7 @@ public class SearchMovies extends JPanel implements IRefreshable {
         this.add(returnToTheaterLobbyButton, BorderLayout.SOUTH);
     }
 
+    // Builds the table showing the movies
     private JTable buildMoviesTable(String[][] movies) {
         String[] columnNames = { "Movie", "Location", "Rated", "Release Year", "Runtime", "Movie Description", "Showtimes" };
         
@@ -244,6 +245,7 @@ public class SearchMovies extends JPanel implements IRefreshable {
         return table;
     }
 
+    // Show the details of the selected movie
     private void showSelectedMovieDetails() {
         moviesTable.getSelectionModel().addListSelectionListener(e -> {
             if (e.getValueIsAdjusting()) {

@@ -12,7 +12,6 @@ import javax.swing.JButton;
 import java.awt.Dimension;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
-import java.awt.Insets;
 import java.awt.Color;
 import javax.swing.BoxLayout;
 
@@ -28,6 +27,11 @@ public class SeatChart extends JPanel {
 
     private ArrayList<String> selectedSeats = new ArrayList<>();
 
+    // Components we update when a new movie is loaded.
+    private JLabel seatChartTitle;
+    private JPanel seatChartPanel;
+    private JTextArea selectedSeatsArea;
+
     public SeatChart(TheaterFrame frame, String[] movie) {
         super();
         this.frame = frame;
@@ -40,16 +44,16 @@ public class SeatChart extends JPanel {
         this.setLayout(layout);
 
         // Create the seat chart title label
-        JLabel seatChartTitle = new JLabel(movie[0] + " - " + movie[1] + " - " + movie[6]);
+        seatChartTitle = new JLabel();
         seatChartTitle.setHorizontalAlignment(SwingConstants.CENTER);
         seatChartTitle.setFont(seatChartTitle.getFont().deriveFont(18f));
 
         // Create the seat chart panel
-        JPanel seatChartPanel = new JPanel();
+        seatChartPanel = new JPanel();
         seatChartPanel.setLayout(new BoxLayout(seatChartPanel, BoxLayout.Y_AXIS));
 
         // Text box at the bottom that shows selected seats.
-        JTextArea selectedSeatsArea = new JTextArea(3, 30);
+        selectedSeatsArea = new JTextArea(3, 30);
         selectedSeatsArea.setEditable(false);
         selectedSeatsArea.setLineWrap(true);
         selectedSeatsArea.setWrapStyleWord(true);
@@ -58,7 +62,7 @@ public class SeatChart extends JPanel {
         selectedSeatsScrollPane.setBorder(BorderFactory.createTitledBorder("Selected Seats"));
 
         // Create the rows of seats represented by toggle buttons
-        buildSeatChart(seatChartPanel, selectedSeatsArea);
+        buildSeatChart();
 
         // Use flow layout to not auto stretch the seat chart when the window grows
         JPanel seatChartHolder = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0));
@@ -95,10 +99,13 @@ public class SeatChart extends JPanel {
         this.add(seatChartTitle, BorderLayout.NORTH);
         this.add(seatChartHolder, BorderLayout.CENTER);
         this.add(bottomPanel, BorderLayout.SOUTH);
+
+        // Load the initial movie data (also clears any old selections).
+        setMovie(movie);
     }
 
     // Build seat chart
-    private void buildSeatChart(JPanel seatChartPanel, JTextArea selectedSeatsArea) {
+    private void buildSeatChart() {
         // Loop through the rows of seats
         for (int i = 0; i < seatRows.length; i++) {
             JPanel rowPanel = new JPanel();
@@ -108,9 +115,9 @@ public class SeatChart extends JPanel {
             for (int j = 0; j < seatColumns.length; j++) {
                 JToggleButton seatButton = new JToggleButton("" + seatRows[i] + seatColumns[j]);
                 seatButton.setHorizontalAlignment(SwingConstants.CENTER);
-                // Make the toggle button smaller.
+
+                // Adjust properties of the toggle button
                 seatButton.setPreferredSize(new Dimension(40, 40));
-                seatButton.setMargin(new Insets(0, 0, 0, 0));
                 seatButton.setFont(seatButton.getFont().deriveFont(10f));
                 seatButton.setFocusPainted(false);
                 seatButton.setOpaque(true);
@@ -121,6 +128,7 @@ public class SeatChart extends JPanel {
                 Color selectedBg = seatButton.getBackground().darker();
                 Color selectedFg = seatButton.getForeground().darker();
 
+                // Update the color of the toggle button if it is selected or unselected
                 seatButton.addItemListener(itemEvent -> {
                     if (seatButton.isSelected()) {
                         seatButton.setBackground(selectedBg);
@@ -131,7 +139,7 @@ public class SeatChart extends JPanel {
                     }
                 });
 
-                // Update selected seats display when toggled.
+                // Update selected seats text when toggled
                 seatButton.addActionListener(actionEvent -> {
                     selectedSeatsArea.setText(buildSelectedSeatsText(seatChartPanel));
                     selectedSeatsArea.setCaretPosition(0);
@@ -142,10 +150,30 @@ public class SeatChart extends JPanel {
         }
     }
 
+    // Update the panel when a new movie is loaded.
+    public void setMovie(String[] movie) {
+        // Set the title of the seat chart to the movie name, location, and time
+        seatChartTitle.setText(movie[0] + " - " + movie[1] + " - " + movie[6]);
+
+        // Reset selected seats
+        selectedSeats.clear();
+        selectedSeatsArea.setText("None");
+
+        // Reset the selected seats in the seat chart panel to be unselected
+        for (java.awt.Component rowComponent : seatChartPanel.getComponents()) {
+            JPanel rowPanel = (JPanel) rowComponent;
+            for (java.awt.Component seatComponent : rowPanel.getComponents()) {
+                if (seatComponent instanceof JToggleButton) {
+                    ((JToggleButton) seatComponent).setSelected(false);
+                }
+            }
+        }
+    }
+
     // Loop through the seats in the seat chart panel and build the text for the selected seats
     private String buildSelectedSeatsText(JPanel seatChartPanel) {
         // Build the text for the selected seats
-        StringBuilder sb = new StringBuilder("");
+        String selectedSeatsText = "";
         selectedSeats.clear();
         boolean anySelected = false;
 
@@ -158,9 +186,9 @@ public class SeatChart extends JPanel {
                 JToggleButton seatButton = (JToggleButton) seatComponent;
                 if (seatButton.isSelected()) { // If the seat is selected, add it to the text
                     if (anySelected) {
-                        sb.append(", ");
+                        selectedSeatsText += ", ";
                     }
-                    sb.append(seatButton.getText());
+                    selectedSeatsText += seatButton.getText();
                     selectedSeats.add(seatButton.getText());
                     anySelected = true;
                 }
@@ -169,9 +197,9 @@ public class SeatChart extends JPanel {
 
         // If no seats are selected, add "None" to the text
         if (!anySelected) {
-            sb.append("None");
+            selectedSeatsText += "None";
         }
 
-        return sb.toString();
+        return selectedSeatsText;
     }
 }
