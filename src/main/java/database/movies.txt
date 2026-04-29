@@ -1,0 +1,7 @@
+id/name/theater_type/rated/runtime/release_year/description
+1,Interstellar,OUTDOOR,PG-13,169,2014,This is a movie about a group of astronauts who travel to a new planet to find a new home for humanity.
+2,Project Hail Mary,OUTDOOR,PG-13,156,2026,This is a movie about a scientist who travels interstellar on a mission to save the Earth.
+3,Michael,INDOOR,PG-13,130,2026,The early life of the famous musician Michael Jackson, known as the King of Pop.
+4,South Park: Bigger Longer & Uncut,INDOOR,R,81,1999,When Eric Cartman and his friends go see an R-rated movie, they start cursing and their parents think that Canada is to blame.
+5,Pacific Rim,DRIVE-IN,PG-13,131,2013,A former pilot and a trainee are paired up to pilot a special weapon in effort to save the world from the apocalypse.
+6,Pacific Rim: Uprising,DRIVE-IN,PG-13,111,2018,A new generation of Jaeger pilots is assembled to counter a new Kaiju threat.
