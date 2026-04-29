@@ -1,4 +1,4 @@
-package main.java.backend.FoodService;
+package backend.FoodService;
 
 public interface FoodService {
     // TODO:

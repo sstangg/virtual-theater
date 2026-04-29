@@ -1,4 +1,4 @@
-package main.java.backend.Tickets;
+package backend.Tickets;
 
 public class SeatedTicket extends Ticket{
     private int seatId;

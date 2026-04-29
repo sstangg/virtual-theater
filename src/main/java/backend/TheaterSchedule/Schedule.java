@@ -1,4 +1,4 @@
-package main.java.backend.TheaterSchedule;
+package backend.TheaterSchedule;
 import java.util.ArrayList;
 import java.util.List;
 

@@ -1,6 +1,6 @@
-package main.java.backend.Theater;
+package backend.Theater;
 
-import main.java.backend.Seating.UnassignedSeating;
+import backend.Seating.UnassignedSeating;
 
 public class OutdoorTheater extends Theater {
     public OutdoorTheater(int theaterId, TheaterType type, int capacity) {

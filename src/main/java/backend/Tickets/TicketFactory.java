@@ -1,4 +1,4 @@
-package main.java.backend.Tickets;
+package backend.Tickets;
 
 public class TicketFactory {
     // TODO: seated parameters? what params..

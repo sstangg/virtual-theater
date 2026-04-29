@@ -1,4 +1,4 @@
-package main.java.backend.TheaterSchedule;
+package backend.TheaterSchedule;
 
 import java.sql.Time;
 

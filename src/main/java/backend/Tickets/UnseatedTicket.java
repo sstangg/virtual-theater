@@ -1,4 +1,4 @@
-package main.java.backend.Tickets;
+package backend.Tickets;
 
 public class UnseatedTicket extends Ticket {
     // TODO:

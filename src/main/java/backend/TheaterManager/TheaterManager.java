@@ -1,8 +1,8 @@
-package main.java.backend.TheaterManager;
+package backend.TheaterManager;
 
-import main.java.backend.Customer;
-import main.java.backend.Theater.Theater;
-import main.java.backend.Theater.TheaterType;
+import backend.Customer;
+import backend.Theater.Theater;
+import backend.Theater.TheaterType;
 
 import java.util.ArrayList;
 import java.util.List;

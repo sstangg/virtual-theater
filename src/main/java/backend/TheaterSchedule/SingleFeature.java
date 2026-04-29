@@ -1,4 +1,4 @@
-package main.java.backend.TheaterSchedule;
+package backend.TheaterSchedule;
 
 public class SingleFeature extends Showing {
     private final int movieId;

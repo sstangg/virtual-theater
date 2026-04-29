@@ -1,4 +1,4 @@
-package main.java.backend.Seating;
+package backend.Seating;
 
 public class UnassignedSeating implements SeatingStrategy{
     // TODO:
