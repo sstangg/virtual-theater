@@ -289,7 +289,6 @@ public class SearchMovies extends JPanel implements IRefreshable {
                 String[] times = getShowtimes(showtimes.toString());
                 for (String time : times) {
                     JButton timeButton = new JButton(time);
-                    // TODO: Add functionality to the showtime buttons to go to seat chart
                     timeButton.addActionListener(actionEvent -> {
                         selectedMovie[6] = time;
                         frame.openSeatChart(selectedMovie);

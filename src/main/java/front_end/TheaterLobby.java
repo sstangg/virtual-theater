@@ -5,6 +5,7 @@ import java.awt.FlowLayout;
 
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
+import java.awt.Dimension;
 
 import javax.swing.JPanel;
 import javax.swing.JLabel;
@@ -37,7 +38,6 @@ public class TheaterLobby extends JPanel implements IRefreshable {
         JButton browseMoviesButton = new JButton();
         browseMoviesButton.setText("Browse Movies");
         browseMoviesButton.addActionListener(e -> {
-            // TODO: Implement the logic to go to the browse movies page
             frame.showCard(TheaterFrame.CARD_SEARCH_MOVIES);
         });
         JButton watchMovieButton = new JButton();
@@ -49,12 +49,15 @@ public class TheaterLobby extends JPanel implements IRefreshable {
         optionButtonsHolderPanel.add(watchMovieButton);
 
         // Create the exit theater button
+        JPanel exitTheaterButtonHolderPanel = new JPanel();
+        exitTheaterButtonHolderPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
         JButton exitTheaterButton = new JButton();
         exitTheaterButton.setText("Exit Theater");
         exitTheaterButton.addActionListener(e -> {
+            frame.clearCustomerInfo();
             frame.showCard(TheaterFrame.CARD_WELCOME);
         });
-        exitTheaterButton.setHorizontalAlignment(SwingConstants.CENTER);
+        exitTheaterButtonHolderPanel.add(exitTheaterButton);
 
         // Add the labels and buttons to the panel
         GridBagConstraints constraints = new GridBagConstraints(0, 0, 1, 1, 0, 0, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0);
@@ -64,7 +67,7 @@ public class TheaterLobby extends JPanel implements IRefreshable {
         this.add(optionButtonsHolderPanel, constraints);
         
         constraints.gridy = 2;
-        this.add(exitTheaterButton, constraints);
+        this.add(exitTheaterButtonHolderPanel, constraints);
     }
 
     @Override
