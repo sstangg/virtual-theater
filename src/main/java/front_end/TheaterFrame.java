@@ -15,15 +15,23 @@ public class TheaterFrame extends JFrame {
     public static final String CARD_THEATER_LOBBY = "theaterLobby";
     public static final String CARD_SEARCH_MOVIES = "searchMovies";
     public static final String CARD_SEAT_CHART = "seatChart";
+    public static final String CARD_TICKET_CONFIRMATION = "ticketConfirmation";
+    public static final String CARD_CUSTOMER_PROFILE = "customerProfile";
 
     // Cached variables
-    private String userName;
+    private String[] customerInfo = new String[] { "", "", "", "", "", "", "", "", "Michael, Interstellar", "Popcorn, Soda" };
 
     private final CardLayout cardLayout = new CardLayout();
     private final JPanel cards = new JPanel(cardLayout);
     private final HashMap<String, IRefreshable> refreshablePanels = new HashMap<>();
-    // Holds an empty movie initially
-    private final SeatChart seatChartPanel = new SeatChart(this, new String[] { "", "", "", "", "", "", "" });
+
+    // The pages that are in the application
+    private WelcomePanel welcomePanel;
+    private TheaterLobby theaterLobbyPanel;
+    private SearchMovies searchMoviesPanel;
+    private SeatChart seatChartPanel;
+    private ComfirmationPage ticketConfirmationPanel;
+    private CustomerProfile customerProfilePanel;
 
     public TheaterFrame() {
         super("Virtual Theater");
@@ -32,25 +40,33 @@ public class TheaterFrame extends JFrame {
         setLocationByPlatform(true);
 
         // Create the panels for the cards
-        JPanel welcomePanel = new WelcomePanel(this);
-        JPanel theaterLobbyPanel = new TheaterLobby(this);
-        JPanel searchMoviesPanel = new SearchMovies(this);
+        welcomePanel = new WelcomePanel(this);
+        theaterLobbyPanel = new TheaterLobby(this);
+        searchMoviesPanel = new SearchMovies(this);
+        // TODO: Holds an empty movie initially, replace with the actual movie data
+        seatChartPanel = new SeatChart(this, new String[] { "", "", "", "", "", "", "" });
+        ticketConfirmationPanel = new ComfirmationPage(this);
+        customerProfilePanel = new CustomerProfile(this, customerInfo);
 
         // Add the panels to the cardLayout
         cards.add(welcomePanel, CARD_WELCOME);
         cards.add(theaterLobbyPanel, CARD_THEATER_LOBBY);
         cards.add(searchMoviesPanel, CARD_SEARCH_MOVIES);
         cards.add(seatChartPanel, CARD_SEAT_CHART);
+        cards.add(ticketConfirmationPanel, CARD_TICKET_CONFIRMATION);
+        cards.add(customerProfilePanel, CARD_CUSTOMER_PROFILE);
 
         // Add the refreshable panels to the map
+        refreshablePanels.put(CARD_WELCOME, (IRefreshable) welcomePanel);
         refreshablePanels.put(CARD_THEATER_LOBBY, (IRefreshable) theaterLobbyPanel);
         refreshablePanels.put(CARD_SEARCH_MOVIES, (IRefreshable) searchMoviesPanel);
+        refreshablePanels.put(CARD_CUSTOMER_PROFILE, (IRefreshable) customerProfilePanel);
      
         // Add the cardLayout to the frame
         add(cards);
 
         // Show the welcome panel by default
-        cardLayout.show(cards, CARD_SEARCH_MOVIES);
+        cardLayout.show(cards, CARD_WELCOME);
     }
 
     public void showCard(String name) {
@@ -64,15 +80,33 @@ public class TheaterFrame extends JFrame {
     }
 
     public String getUserName() {
-        return userName;
+        return customerInfo[0];
     }
 
     public void setUserName(String userName) {
-        this.userName = userName;
+        this.customerInfo[0] = userName;
+    }
+
+    public String[] getCustomerInfo() {
+        return customerInfo;
+    }
+
+    public void setCustomerInfo(String[] customerInfo) {
+        System.out.println("Setting customer info " + customerInfo.toString());
+        this.customerInfo = customerInfo;
+    }
+
+    public void clearCustomerInfo() {
+        this.customerInfo = new String[] { "", "", "", "", "", "", "", "", "", "" };
     }
 
     public void openSeatChart(String[] movie) {
         seatChartPanel.setMovie(movie);
         cardLayout.show(cards, CARD_SEAT_CHART);
+    }
+
+    public void openConfirmationPage(String[] movie, String[] seats){
+        ticketConfirmationPanel.setBookingDetails(movie, seats);
+        cardLayout.show(cards, CARD_TICKET_CONFIRMATION);
     }
 }

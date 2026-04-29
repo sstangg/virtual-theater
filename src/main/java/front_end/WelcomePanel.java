@@ -14,9 +14,9 @@ import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
 
-public class WelcomePanel extends JPanel {
+public class WelcomePanel extends JPanel implements IRefreshable {
 
-    private String userName;
+    private JTextField userNameTextField;
     private TheaterFrame frame;
 
     public WelcomePanel(TheaterFrame frame) {
@@ -37,20 +37,20 @@ public class WelcomePanel extends JPanel {
         JPanel userNamePanel = new JPanel();
         userNamePanel.setLayout(new FlowLayout(FlowLayout.CENTER));
         JLabel userNameLabel = new JLabel("User Name:"); // Label for the user name input field
-        JTextField userNameTextField = new JTextField(20); // Text field for the user name input
+        userNameTextField = new JTextField(20); // Text field for the user name input
         userNamePanel.add(userNameLabel);
         userNamePanel.add(userNameTextField);
 
         // Create the button and place it in the center of the panel
         JButton startButton = new JButton("Enter Theatre");
         startButton.addActionListener(e -> {
-            userName = userNameTextField.getText();
+            String userName = userNameTextField.getText();
             if (userName.isEmpty()) {
                 JOptionPane.showMessageDialog(this, "Please enter a user name.", "Error", JOptionPane.ERROR_MESSAGE);
                 return;
             }
             frame.setUserName(userName);
-            frame.showCard(TheaterFrame.CARD_THEATER_LOBBY);
+            frame.showCard(TheaterFrame.CARD_CUSTOMER_PROFILE);
         });
         startButton.setHorizontalAlignment(SwingConstants.CENTER);
 
@@ -67,6 +67,9 @@ public class WelcomePanel extends JPanel {
     }
     
     public void refreshCache() {
-        userName = frame.getUserName();
+        String userName = frame.getUserName();
+        if (userName != null) {
+            userNameTextField.setText(userName);
+        }
     }
 }

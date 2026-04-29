@@ -31,6 +31,7 @@ public class SeatChart extends JPanel {
     private JLabel seatChartTitle;
     private JPanel seatChartPanel;
     private JTextArea selectedSeatsArea;
+    private String[] currentMovie;
 
     public SeatChart(TheaterFrame frame, String[] movie) {
         super();
@@ -87,6 +88,7 @@ public class SeatChart extends JPanel {
         JButton continueButton = new JButton("Continue");
         continueButton.addActionListener(e -> {
             // TODO: Implement the logic to continue to the ticket confirmation page
+            frame.openConfirmationPage(currentMovie, selectedSeats.toArray(new String[0]));
         });
         buttonHolderPanel.add(backButton);
         buttonHolderPanel.add(continueButton);
@@ -152,6 +154,7 @@ public class SeatChart extends JPanel {
 
     // Update the panel when a new movie is loaded.
     public void setMovie(String[] movie) {
+        currentMovie = movie;
         // Set the title of the seat chart to the movie name, location, and time
         seatChartTitle.setText(movie[0] + " - " + movie[1] + " - " + movie[6]);
 
