@@ -1,9 +1,10 @@
 package backend.TheaterSchedule;
 
+import java.sql.Time;
+    
 public class SingleFeature extends Showing {
-    private final int movieId;
-    public SingleFeature(Movie m) {
-        super(true);
-        this.movieId = m.getMovieId();
+    public SingleFeature(Movie m, Time startTime, Time endTime) {
+        super(true, startTime, endTime);
+        setMovieId(m.getMovieId());
     }
 }

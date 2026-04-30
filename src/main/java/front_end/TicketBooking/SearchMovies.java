@@ -36,11 +36,7 @@ public class SearchMovies extends JPanel implements IRefreshable {
 
     private TheaterFrame frame;
 
-    private String[][] movies = {
-        { "Interstellar", "Indoor", "PG-13", "2014", "169 mins", "This is a movie about a group of astronauts who travel to a new planet to find a new home for humanity.", "12:00, 16:00, 18:00, 20:00"},
-        { "Project Hail Mary", "Outdoor", "PG-13", "2026", "156 mins", "This is a movie about a scientist who travels interstellar on a mission to save the Earth.", "09:00, 11:00, 15:00, 22:00"},
-        { "Michael", "Drive-In", "PG-13", "2026", "130 mins", "The early life of the famous musician Michael Jackson, known as the King of Pop.", "10:00, 14:00, 17:00, 21:00"},
-    };
+    private String[][] movieTableRows;
     private ArrayList<String[]> filteredMovies = new ArrayList<>();
 
     private String[] selectedMovie;
@@ -50,10 +46,11 @@ public class SearchMovies extends JPanel implements IRefreshable {
     private JTextArea movieDescriptionArea;
     private JPanel showtimesPanel;
 
-    public SearchMovies(TheaterFrame frame) {
+    public SearchMovies(TheaterFrame frame, String[][] movieTableRows) {
         this.frame = frame;
+        this.movieTableRows = movieTableRows;
 
-        moviesTable = buildMoviesTable(movies);
+        moviesTable = buildMoviesTable(movieTableRows);
         moviesTableScrollPane = new JScrollPane(moviesTable);
 
         // Border padding
@@ -98,7 +95,7 @@ public class SearchMovies extends JPanel implements IRefreshable {
 
             // Get the movies that match the search criteria
             filteredMovies.clear();
-            for (String[] movie : movies) {
+            for (String[] movie : movieTableRows) {
                 boolean matchesLocation = location.equals("All") || movie[1].equals(location);
                 boolean matchesName = nameQuery.isEmpty() || movie[0].toLowerCase().contains(nameQuery);
                 if (matchesLocation && matchesName) {
@@ -115,7 +112,7 @@ public class SearchMovies extends JPanel implements IRefreshable {
             searchMoviesByNameTextField.setText("");
             searchMoviesByLocationDropdown.setSelectedItem("All");
             movieDescriptionArea.setText("Click a movie in the table to see its description here.");
-            updateMoviesTable(movies);
+            updateMoviesTable(this.movieTableRows);
         });
 
         // GridBagConstraints for the search form panel with 8 pixels of padding between the components
@@ -220,12 +217,10 @@ public class SearchMovies extends JPanel implements IRefreshable {
         this.add(returnToTheaterLobbyButton, BorderLayout.SOUTH);
     }
 
-    // Builds the table showing the movies
-    private JTable buildMoviesTable(String[][] movies) {
+    private JTable buildMoviesTable(String[][] rows) {
         String[] columnNames = { "Movie", "Location", "Rated", "Release Year", "Runtime", "Movie Description", "Showtimes" };
-        
-        // Make it so that the table is not editable
-        DefaultTableModel model = new DefaultTableModel(movies, columnNames) {
+
+        DefaultTableModel model = new DefaultTableModel(rows, columnNames) {
             @Override
             public boolean isCellEditable(int row, int column) {
                 return false;

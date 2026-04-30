@@ -1,7 +1,6 @@
 package front_end;
 
 import java.awt.CardLayout;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
@@ -33,7 +32,7 @@ public class TheaterFrame extends JFrame {
     private ComfirmationPage ticketConfirmationPanel;
     private CustomerProfile customerProfilePanel;
 
-    public TheaterFrame() {
+    public TheaterFrame(String[][] searchMovieRows) {
         super("Virtual Theater");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(800, 1000);
@@ -42,8 +41,7 @@ public class TheaterFrame extends JFrame {
         // Create the panels for the cards
         welcomePanel = new WelcomePanel(this);
         theaterLobbyPanel = new TheaterLobby(this);
-        searchMoviesPanel = new SearchMovies(this);
-        // TODO: Holds an empty movie initially, replace with the actual movie data
+        searchMoviesPanel = new SearchMovies(this, searchMovieRows);
         seatChartPanel = new SeatChart(this, new String[] { "", "", "", "", "", "", "" });
         ticketConfirmationPanel = new ComfirmationPage(this);
         customerProfilePanel = new CustomerProfile(this, customerInfo);
@@ -64,8 +62,6 @@ public class TheaterFrame extends JFrame {
      
         // Add the cardLayout to the frame
         add(cards);
-
-        // Show the welcome panel by default
         cardLayout.show(cards, CARD_WELCOME);
     }
 
