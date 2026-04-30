@@ -1,4 +1,4 @@
-package backend.TheaterSchedule;
+package main.java.backend.TheaterSchedule;
 
 public class DoubleFeature extends Showing {
     private final int[] movieIds;

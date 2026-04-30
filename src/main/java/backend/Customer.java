@@ -1,4 +1,4 @@
-package backend;
+package main.java.backend;
 
 import java.util.Objects;
 

@@ -1,8 +1,8 @@
-package backend.TheaterManager;
+package main.java.backend.TheaterManager;
 
-import backend.Customer;
-import backend.Theater.Theater;
-import backend.Theater.TheaterType;
+import main.java.backend.Customer;
+import main.java.backend.Theater.Theater;
+import main.java.backend.Theater.TheaterType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +23,12 @@ public abstract class TheaterManager {
     public TheaterType getType() { return type; }
     public Theater getTheater(int i) { return theaters.get(i); }
     public Customer getCustomer(int i) { return customers.get(i); }
+
+    public List<Theater> getTheaters() { return theaters; }
+    public List<Customer> getCustomers() { return customers; }
+
+    public void addTheater(Theater t) { theaters.add(t); }
+    public void addCustomer(Customer c) { customers.add(c); }
 
     @Override
     public String toString() {

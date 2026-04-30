@@ -1,4 +1,4 @@
-package backend.Tickets;
+package main.java.backend.Tickets;
 
 public abstract class Ticket {
     private int ticketId;

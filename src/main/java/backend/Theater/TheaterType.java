@@ -1,4 +1,4 @@
-package backend.Theater;
+package main.java.backend.Theater;
 public enum TheaterType {
     INDOOR,
     OUTDOOR,

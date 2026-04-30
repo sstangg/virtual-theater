@@ -1,4 +1,4 @@
-package backend.TheaterSchedule;
+package main.java.backend.TheaterSchedule;
 
 // static class? or singleton..
 public class ShowingFactory {

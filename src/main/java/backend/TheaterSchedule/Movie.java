@@ -1,4 +1,4 @@
-package backend.TheaterSchedule;
+package main.java.backend.TheaterSchedule;
 import java.sql.Time;
 // TODO: figure out how to make this created from a JSON file of Movies
 public class Movie {

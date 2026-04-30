@@ -1,7 +1,7 @@
-package backend.Theater;
+package main.java.backend.Theater;
 
-import backend.Seating.SeatingStrategy;
-import backend.TheaterSchedule.Schedule;
+import main.java.backend.Seating.SeatingStrategy;
+import main.java.backend.TheaterSchedule.Schedule;
 
 import java.util.Objects;
 
