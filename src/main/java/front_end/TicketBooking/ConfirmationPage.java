@@ -8,12 +8,12 @@ import javax.swing.SwingConstants;
 
 import java.awt.BorderLayout;
 
-public class ComfirmationPage extends JPanel {
+public class ConfirmationPage extends JPanel {
     private TheaterFrame frame;
 
     private JLabel bookingDetailsLabel;
 
-    public ComfirmationPage(TheaterFrame frame) {
+    public ConfirmationPage(TheaterFrame frame) {
         super();
         this.frame = frame;
 
