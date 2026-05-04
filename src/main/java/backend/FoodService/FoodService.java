@@ -1,5 +1,7 @@
 package backend.FoodService;
 
+import java.util.List;
+
 public interface FoodService {
-    // TODO:
+    List<Food> getMenu();
 }
