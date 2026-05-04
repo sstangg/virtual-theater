@@ -91,6 +91,16 @@ Design Decisions:
 1. New Theater
 2. Watching Movie simulation - Customer.watchMovie(int showingId, String movieName) returns the simulation string for the Watching Movie page. Different text for basic / enhanced / luxury seats and for unseated (outdoor / drive-in) tickets, plus the Customer's purchased Foods. Takes primitives instead of (Showing, Movie) objects so the simulation does not depend on the still-evolving Showing/Movie API.
 3. Seat-conflict check - TheaterManager keeps a list of sold Tickets and exposes isSeatBooked(seatId, showingId). Frontend calls this when rendering the SeatChart to disable seats already booked for the chosen showing.
+4. Booking flow - SearchMovies builds a BookingDraft (Showing + Movie + location + time) on showtime click. 
+ - Indoor goes through SeatChart -> FoodSelectionPanel -> ConfirmationPage
+ - Outdoor and Drive-in skip SeatChart since they're unseated
+ - testManager owns the global soldTickets list (TODO: migrate to SeatedTheaterManager) and the IndoorTheater's 120 BasicSeats so the chart's A1..J12 labels map to real Seat objects.
+5. Purchase Confirmation - ConfirmationPage shows the order summary (with seat + food subtotals) and a simulated credit-card form. Complete Purchase is only enabled when all validation tests are passed. It proceeds to call testManager.completePurchase to create Tickets, attach them to the Customer, register them on the global sold list (so future bookings see the seats taken), and adds the chosen Foods to the Customer.
+
+//TODO:------------------------------------------------------------------------------------
+- Seat pricing variants (Enhanced / Luxury). Every seat is currently a BasicSeat.
+- Migrating the sold-tickets list from testManager into SeatedTheaterManager.
+- Preferred-customer discount, ticket cancellation, real payment processing.
 
 
 ## Division of Work

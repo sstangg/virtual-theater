@@ -8,7 +8,7 @@ public class Main {
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
             testManager manager = new testManager();
-            TheaterFrame frame = new TheaterFrame(manager.getSearchMovieRows());
+            TheaterFrame frame = new TheaterFrame(manager.getSearchMovieRows(), manager);
             frame.setVisible(true);
         });
     }

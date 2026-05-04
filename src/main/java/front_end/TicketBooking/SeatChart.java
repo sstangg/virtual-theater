@@ -15,25 +15,29 @@ import java.awt.FlowLayout;
 import java.awt.Color;
 import javax.swing.BoxLayout;
 
+import backend.Seating.Seat;
+import front_end.BookingDraft;
 import front_end.TheaterFrame;
 
 import java.util.ArrayList;
 
 public class SeatChart extends JPanel {
-    private TheaterFrame frame;
+    private static final String[] SEAT_ROW_LABELS = { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J" };
+    private static final int SEAT_COL_COUNT = 12;
 
-    private String[] seatRows = { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J"};
-    private String[] seatColumns = { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"};
+    private TheaterFrame frame;
 
     private ArrayList<String> selectedSeats = new ArrayList<>();
 
-    // Components we update when a new movie is loaded.
+    // Components we update when a new booking is loaded.
     private JLabel seatChartTitle;
     private JPanel seatChartPanel;
     private JTextArea selectedSeatsArea;
-    private String[] currentMovie;
 
-    public SeatChart(TheaterFrame frame, String[] movie) {
+    // Booking the user is currently working on. Set by setBooking when entering the card.
+    private BookingDraft currentDraft;
+
+    public SeatChart(TheaterFrame frame) {
         super();
         this.frame = frame;
 
@@ -45,7 +49,7 @@ public class SeatChart extends JPanel {
         this.setLayout(layout);
 
         // Create the seat chart title label
-        seatChartTitle = new JLabel();
+        seatChartTitle = new JLabel(" ");
         seatChartTitle.setHorizontalAlignment(SwingConstants.CENTER);
         seatChartTitle.setFont(seatChartTitle.getFont().deriveFont(18f));
 
@@ -87,8 +91,16 @@ public class SeatChart extends JPanel {
         });
         JButton continueButton = new JButton("Continue");
         continueButton.addActionListener(e -> {
-            // TODO: Implement the logic to continue to the ticket confirmation page
-            frame.openConfirmationPage(currentMovie, selectedSeats.toArray(new String[0]));
+            // Translate the picked labels letter number labels into real Seat objects on the draft.
+            ArrayList<Seat> chosen = new ArrayList<Seat>();
+            for (int i = 0; i < selectedSeats.size(); i++) {
+                Seat s = frame.getManager().getSeatByLabel(selectedSeats.get(i));
+                if (s != null) {
+                    chosen.add(s);
+                }
+            }
+            currentDraft.setChosenSeats(chosen);
+            frame.openFoodSelection();
         });
         buttonHolderPanel.add(backButton);
         buttonHolderPanel.add(continueButton);
@@ -101,21 +113,18 @@ public class SeatChart extends JPanel {
         this.add(seatChartTitle, BorderLayout.NORTH);
         this.add(seatChartHolder, BorderLayout.CENTER);
         this.add(bottomPanel, BorderLayout.SOUTH);
-
-        // Load the initial movie data (also clears any old selections).
-        setMovie(movie);
     }
 
     // Build seat chart
     private void buildSeatChart() {
         // Loop through the rows of seats
-        for (int i = 0; i < seatRows.length; i++) {
+        for (int i = 0; i < SEAT_ROW_LABELS.length; i++) {
             JPanel rowPanel = new JPanel();
             rowPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 4, 4));
 
             // Create the seats in the row
-            for (int j = 0; j < seatColumns.length; j++) {
-                JToggleButton seatButton = new JToggleButton("" + seatRows[i] + seatColumns[j]);
+            for (int j = 0; j < SEAT_COL_COUNT; j++) {
+                JToggleButton seatButton = new JToggleButton("" + SEAT_ROW_LABELS[i] + (j + 1));
                 seatButton.setHorizontalAlignment(SwingConstants.CENTER);
 
                 // Adjust properties of the toggle button
@@ -152,23 +161,35 @@ public class SeatChart extends JPanel {
         }
     }
 
-    // Update the panel when a new movie is loaded.
-    public void setMovie(String[] movie) {
-        currentMovie = movie;
-        // Set the title of the seat chart to the movie name, location, and time
-        seatChartTitle.setText(movie[0] + " - " + movie[1] + " - " + movie[6]);
+    // Set the booking for the seat chart
+    public void setBooking(BookingDraft draft) {
+        currentDraft = draft;
+
+        String movieName = draft.movieName();
+        String location = draft.getLocation();
+        String showtime = draft.getShowtime();
+        seatChartTitle.setText(movieName + " - " + location + " - " + showtime);
 
         // Reset selected seats
         selectedSeats.clear();
         selectedSeatsArea.setText("None");
 
-        // Reset the selected seats in the seat chart panel to be unselected
+        int showingId = draft.getShowing().getShowingId();
+
+        // Update the seat chart to show the seats that are sold for the showing
         for (java.awt.Component rowComponent : seatChartPanel.getComponents()) {
             JPanel rowPanel = (JPanel) rowComponent;
             for (java.awt.Component seatComponent : rowPanel.getComponents()) {
-                if (seatComponent instanceof JToggleButton) {
-                    ((JToggleButton) seatComponent).setSelected(false);
+                if (!(seatComponent instanceof JToggleButton)) {
+                    continue;
                 }
+                JToggleButton btn = (JToggleButton) seatComponent;
+                btn.setSelected(false);
+
+                String label = btn.getText();
+                Seat currentSeat = frame.getManager().getSeatByLabel(label);
+                boolean booked = frame.getManager().isSeatBookedForShowing(showingId, currentSeat.getSeatId());
+                btn.setEnabled(!booked); // If the seat is booked, disable the button
             }
         }
     }

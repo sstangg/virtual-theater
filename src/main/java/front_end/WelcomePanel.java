@@ -14,6 +14,8 @@ import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
 
+import backend.Customer;
+
 public class WelcomePanel extends JPanel implements IRefreshable {
 
     private JTextField userNameTextField;
@@ -49,6 +51,9 @@ public class WelcomePanel extends JPanel implements IRefreshable {
                 JOptionPane.showMessageDialog(this, "Please enter a user name.", "Error", JOptionPane.ERROR_MESSAGE);
                 return;
             }
+            // Create a Customer and store it on the frame for the session
+            Customer c = frame.getManager().createCustomer(userName);
+            frame.setCustomer(c);
             frame.setUserName(userName);
             frame.showCard(TheaterFrame.CARD_CUSTOMER_PROFILE);
         });

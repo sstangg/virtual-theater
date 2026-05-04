@@ -5,26 +5,85 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import backend.Customer;
+import backend.FoodService.Food;
+import backend.Seating.Seat;
+import backend.Seating.SeatFactory;
+import backend.Theater.IndoorTheater;
+import backend.Theater.Room;
+import backend.TheaterSchedule.DoubleFeature;
 import backend.TheaterSchedule.Movie;
 import backend.TheaterSchedule.Schedule;
 import backend.TheaterSchedule.Showing;
-import backend.TheaterSchedule.DoubleFeature;
 import backend.Theater.TheaterType;
+import backend.Tickets.SeatedTicket;
+import backend.Tickets.Ticket;
+import backend.Tickets.TicketFactory;
+import backend.Tickets.UnseatedTicket;
+
+import java.util.HashMap;
 
 public class testManager {
     private static final String MOVIES_FILE_PATH = "src/main/java/database/movies.txt";
+    private static final String FOODS_FILE_PATH = "src/main/java/database/food.txt";
+
+    // Hardcoded chart dimensions matching SeatChart.
+    private static final int SEAT_ROW_COUNT = 10;
+    private static final int SEAT_COL_COUNT = 12;
+    private static final String[] SEAT_ROW_LABELS = { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J" };
 
     private final ArrayList<Movie> movies;
+    private final ArrayList<Food> foods;
     private final Schedule schedule;
     private final String[][] searchMovieRows;
 
+    // Indoor theatre with a single 120-seat room. Every chart cell maps to one of these Seats.
+    private final IndoorTheater indoorTheater;
+    private final Seat[][] seatGrid;
+    private final HashMap<Integer, String> seatIdToLabel;
+    private final HashMap<String, Seat> labelToSeat;
+
+    // Global sold-ticket list (TODO: migrate ownership to SeatedTheaterManager).
+    private final ArrayList<Ticket> soldTickets;
+
+    // Customer roster created on welcome.
+    private final ArrayList<Customer> customers;
+    private int nextCustomerId;
+
     public testManager() {
         this.movies = new ArrayList<>();
+        this.foods = new ArrayList<>();
         loadMoviesFromTxt(MOVIES_FILE_PATH);
+        loadFoodsFromTxt(FOODS_FILE_PATH);
         // build schedule based on the movies in database
         this.schedule = Schedule.buildScheduleFromMovies(this.movies);
         // from schedule and movies, build the search movie rows for the search movie UI
         this.searchMovieRows = buildSearchMovieRows(this.movies, this.schedule);
+
+        // Build the indoor theatre + seat grid.
+        // TODO: introduce Enhanced/Luxury rows and their prices.
+        this.seatGrid = new Seat[SEAT_ROW_COUNT][SEAT_COL_COUNT];
+        this.seatIdToLabel = new HashMap<Integer, String>(); // map the seat id to the label
+        this.labelToSeat = new HashMap<String, Seat>(); // map the label to the seat
+
+        Room room = new Room(1);
+        for (int r = 0; r < SEAT_ROW_COUNT; r++) {
+            for (int c = 0; c < SEAT_COL_COUNT; c++) {
+                Seat s = SeatFactory.createBasicSeat();
+                room.addSeat(s); // add the seat to the room
+                seatGrid[r][c] = s; // add the seat to the seat grid
+                String label = SEAT_ROW_LABELS[r] + String.valueOf(c + 1); // create the label for the seat
+                seatIdToLabel.put(Integer.valueOf(s.getSeatId()), label); // map the seat id to the label
+                labelToSeat.put(label, s); // map the label to the seat
+            }
+        }
+        ArrayList<Room> rooms = new ArrayList<Room>();
+        rooms.add(room);
+        this.indoorTheater = new IndoorTheater(1, rooms);
+
+        this.soldTickets = new ArrayList<Ticket>();
+        this.customers = new ArrayList<Customer>();
+        this.nextCustomerId = 1;
     }
 
     public ArrayList<Movie> getMovies() {
@@ -37,6 +96,181 @@ public class testManager {
 
     public String[][] getSearchMovieRows() {
         return this.searchMovieRows;
+    }
+
+    public ArrayList<Food> getFoods() {
+        return this.foods;
+    }
+
+    // Get the delivery foods (packaged)
+    public ArrayList<Food> getDeliveryFoods() {
+        ArrayList<Food> deliveryFoods = new ArrayList<Food>();
+        for (int i = 0; i < foods.size(); i++) {
+            Food f = foods.get(i);
+            if (f.isPackaged()) {
+                deliveryFoods.add(f);
+            }
+        }
+        return deliveryFoods;
+    }
+
+    // Get the concession foods (non-packaged)
+    public ArrayList<Food> getConcessionFoods() {
+        ArrayList<Food> concessionFoods = new ArrayList<Food>();
+        for (int i = 0; i < foods.size(); i++) {
+            Food f = foods.get(i);
+            if (!f.isPackaged()) {
+                concessionFoods.add(f);
+            }
+        }
+        return concessionFoods;
+    }
+
+    // Movie / Showing lookup helpers ---------------------------------------------------
+
+    public Movie getMovieByName(String name) {
+        for (int i = 0; i < movies.size(); i++) {
+            if (name.equals(movies.get(i).getName())) {
+                return movies.get(i);
+            }
+        }
+        return null;
+    }
+
+    public Movie getMovieById(int movieId) {
+        for (int i = 0; i < movies.size(); i++) {
+            if (movies.get(i).getMovieId() == movieId) {
+                return movies.get(i);
+            }
+        }
+        return null;
+    }
+
+    // Find the Showing in the schedule that contains the given movie and starts at the given time
+    public Showing findShowing(int movieId, String startTimeHhMm) {
+        ArrayList<Showing> showings = schedule.getShowings();
+        for (int i = 0; i < showings.size(); i++) {
+            Showing sh = showings.get(i);
+            // If the start time is not the same as the given start time, continue
+            if (!startTimeHhMm.equals(formatTime(sh.getStartTime()))) {
+                continue;
+            }
+            // If the showing is a double feature, check if the movie id is one of the two movies in the double feature
+            if (sh instanceof DoubleFeature) {
+                int[] ids = ((DoubleFeature) sh).getMovieIds();
+                if (ids[0] == movieId || ids[1] == movieId) {
+                    return sh;
+                }
+            } else if (sh.getMovieId() == movieId) { // If the showing is a single feature, check the movie id
+                return sh;
+            }
+        }
+        return null;
+    }
+
+    // Indoor seat grid -----------------------------------------------------------------
+
+    public IndoorTheater getIndoorTheater() {
+        return indoorTheater;
+    }
+
+    public Seat getSeatByLabel(String label) {
+        return labelToSeat.get(label);
+    }
+
+    public String getSeatLabel(int seatId) {
+        return seatIdToLabel.get(Integer.valueOf(seatId));
+    }
+
+    // Gloabl sold-ticket 
+
+    public boolean isSeatBookedForShowing(int showingId, int seatId) {
+        // loop through the sold tickets
+        for (int i = 0; i < soldTickets.size(); i++) {
+            Ticket t = soldTickets.get(i);
+            // If the ticket is a seated ticket and the showing id and seat id match, return true
+            if (t instanceof SeatedTicket && t.getShowingId() == showingId && ((SeatedTicket) t).getSeatId() == seatId) {
+                return true;
+            }
+        }
+        // If no ticket is found, return false
+        return false;
+    }
+
+    public ArrayList<Ticket> getSoldTickets() {
+        return soldTickets;
+    }
+
+    // Customer ------------------------------------------------------------------
+
+    public Customer createCustomer(String name) {
+        Customer c = new Customer(nextCustomerId, name, false);
+        nextCustomerId++;
+        customers.add(c);
+        return c;
+    }
+
+    public ArrayList<Customer> getCustomers() {
+        return customers;
+    }
+
+    // --- Purchase finalization ------------------------------------------------------------
+
+    // Build the tickets and attach them to the customer and the global sold-ticket list
+    // TODO: when SeatedTheaterManager owns the global ticket list, this method should move there
+    public ArrayList<Ticket> completePurchase(BookingDraft draft, Customer customer) {
+        ArrayList<Ticket> created = new ArrayList<Ticket>();
+
+        int showingId = draft.getShowing().getShowingId();
+
+        // If the draft is seated, create a seated ticket for each chosen seat
+        if (draft.isSeated() && draft.getChosenSeats().size() > 0) {
+            ArrayList<Seat> seats = draft.getChosenSeats();
+            for (int i = 0; i < seats.size(); i++) {
+                Seat s = seats.get(i);
+                SeatedTicket t = TicketFactory.createSeatedTicket(customer.getCustomerId(), showingId, s.getSeatId(), s.getType());
+                customer.addTicket(t);
+                soldTickets.add(t);
+                created.add(t);
+            }
+        } else { // If the draft is unseated, create an unseated ticket
+            UnseatedTicket t = TicketFactory.createUnseatedTicket(customer.getCustomerId(), showingId);
+            customer.addTicket(t);
+            soldTickets.add(t);
+            created.add(t);
+        }
+
+        // Add the chosen foods to the customer
+        ArrayList<Food> chosenFoods = draft.getChosenFoods();
+        if (chosenFoods != null) {
+            for (int i = 0; i < chosenFoods.size(); i++) {
+                customer.addFood(chosenFoods.get(i));
+            }
+        }
+        return created;
+    }
+
+    // Total seat price for a draft's chosen seats.
+    public double seatTotal(BookingDraft draft) {
+        double total = 0.0;
+        for (int i = 0; i < draft.getChosenSeats().size(); i++) {
+            total += draft.getChosenSeats().get(i).getPrice();
+        }
+        return total;
+    }
+
+    // Total food price for a draft's chosen foods.
+    public double foodTotal(BookingDraft draft) {
+        double total = 0.0;
+        for (int i = 0; i < draft.getChosenFoods().size(); i++) {
+            total += draft.getChosenFoods().get(i).getPrice();
+        }
+        return total;
+    }
+
+    // Format a "HH:mm" time string for a given showing
+    public String formatShowingTime(Showing sh) {
+        return formatTime(sh.getStartTime());
     }
 
     private String[][] buildSearchMovieRows(ArrayList<Movie> movies, Schedule schedule) {
@@ -170,6 +404,39 @@ public class testManager {
                     String description = parts[6];
 
                     this.movies.add(new Movie(movieId, name, theaterType, rated, runtime, releaseYear, description));
+                } catch (Exception e) {
+                    System.out.println("Due to an error, skipping line in " + fileName + ": " + line);
+                    e.printStackTrace();
+                }
+            }
+        } catch (IOException e) {
+            System.out.println("Error reading " + fileName);
+            e.printStackTrace();
+        }
+    }
+
+    private void loadFoodsFromTxt(String fileName) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
+            reader.readLine();
+            String line;
+            while ((line = reader.readLine()) != null) {
+                line = line.trim();
+                if (line.length() == 0) {
+                    continue;
+                }
+                String[] parts = line.split(",");
+                for (int p = 0; p < parts.length; p++) {
+                    parts[p] = parts[p].trim();
+                }
+
+                try {
+                    int foodId = Integer.parseInt(parts[0]);
+                    String name = parts[1];
+                    double price = Double.parseDouble(parts[2]);
+                    int packagedFlag = Integer.parseInt(parts[3]);
+                    boolean packaged = packagedFlag != 0;
+
+                    this.foods.add(new Food(foodId, name, price, packaged));
                 } catch (Exception e) {
                     System.out.println("Due to an error, skipping line in " + fileName + ": " + line);
                     e.printStackTrace();

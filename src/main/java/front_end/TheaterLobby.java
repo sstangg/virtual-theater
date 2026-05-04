@@ -5,7 +5,6 @@ import java.awt.FlowLayout;
 
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
-import java.awt.Dimension;
 
 import javax.swing.JPanel;
 import javax.swing.JLabel;
@@ -45,8 +44,13 @@ public class TheaterLobby extends JPanel implements IRefreshable {
         watchMovieButton.addActionListener(e -> {
             // TODO: Implement the logic to go to the watch movie page
         });
+        JButton customerProfileButton = new JButton("Customer Profile");
+        customerProfileButton.addActionListener(e -> {
+            frame.showCard(TheaterFrame.CARD_CUSTOMER_PROFILE);
+        });
         optionButtonsHolderPanel.add(browseMoviesButton);
         optionButtonsHolderPanel.add(watchMovieButton);
+        optionButtonsHolderPanel.add(customerProfileButton);
 
         // Create the exit theater button
         JPanel exitTheaterButtonHolderPanel = new JPanel();
