@@ -7,6 +7,14 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 
+import backend.Customer;
+import backend.FoodService.Food;
+import backend.TheaterSchedule.Movie;
+import backend.TheaterSchedule.Showing;
+import backend.Tickets.SeatedTicket;
+import backend.Tickets.Ticket;
+import backend.TheaterSchedule.DoubleFeature;
+
 public class CustomerProfile extends JPanel implements IRefreshable {
     private TheaterFrame frame;
 
@@ -85,6 +93,8 @@ public class CustomerProfile extends JPanel implements IRefreshable {
             String city = customerCityTextField.getText();
             String state = customerStateTextField.getText();
             String zipCode = customerZipCodeTextField.getText();
+            // Tickets / foods columns are now fed from the real Customer object on refreshCache,
+            // so we keep their current strings just to round-trip the demographic-only array.
             String isPreferredCustomer = customerIsPreferredCustomerLabel.getText();
             String ownedTickets = customerOwnedTicketsLabel.getText();
             String ownedFoodItems = customerOwnedFoodItemsLabel.getText();
@@ -109,8 +119,6 @@ public class CustomerProfile extends JPanel implements IRefreshable {
         gbc.fill = GridBagConstraints.BOTH;
         customerInformationPanel.add(Box.createVerticalGlue(), gbc);
 
-        
-
         this.add(customerInformationPanel, BorderLayout.CENTER);
 
         applyCustomerInfo(customerInfo);
@@ -127,15 +135,107 @@ public class CustomerProfile extends JPanel implements IRefreshable {
         customerCityTextField.setText(customerInfo[4] != null ? customerInfo[4] : "");
         customerStateTextField.setText(customerInfo[5] != null ? customerInfo[5] : "");
         customerZipCodeTextField.setText(customerInfo[6] != null ? customerInfo[6] : "");
-        customerIsPreferredCustomerLabel.setText(customerInfo[7] != null && customerInfo[7] != "" ? customerInfo[7] : "Basic");
-        customerOwnedTicketsLabel.setText(customerInfo[8] != null && customerInfo[8] != "" ? customerInfo[8] : "None");
-        customerOwnedFoodItemsLabel.setText(customerInfo[9] != null && customerInfo[9] != "" ? customerInfo[9] : "None");
     }
 
     @Override
     public void refreshCache() {
         this.customerInfo = frame.getCustomerInfo();
         applyCustomerInfo(this.customerInfo);
+
+        // Membership + tickets + foods come from the real Customer object on the frame.
+        Customer customer = frame.getCustomer();
+        if (customer != null) {
+            customerIsPreferredCustomerLabel.setText(customer.isPreferred() ? "Preferred" : "Basic");
+            customerOwnedTicketsLabel.setText(buildTicketsHtml(customer));
+            customerOwnedFoodItemsLabel.setText(buildFoodsText(customer));
+
+            // Keep the name in the demographic field synced with the Customer.
+            if (customer.getName() != null
+                    && (customerNameTextField.getText() == null || customerNameTextField.getText().length() == 0)) {
+                customerNameTextField.setText(customer.getName());
+            }
+        } else {
+            customerIsPreferredCustomerLabel.setText("Basic");
+            customerOwnedTicketsLabel.setText("None");
+            customerOwnedFoodItemsLabel.setText("None");
+        }
+    }
+
+    // Build the text for the tickets the customer has purchased using HTML formatting
+    private String buildTicketsHtml(Customer customer) {
+        if (customer.getTickets() == null || customer.getTickets().size() == 0) {
+            return "None";
+        }
+        String ticketsText = "";
+        ticketsText += "<html>";
+        for (int i = 0; i < customer.getTickets().size(); i++) {
+            Ticket t = customer.getTickets().get(i);
+            ticketsText += formatTicketLine(t);
+            if (i < customer.getTickets().size() - 1) {
+                ticketsText += "<br>";
+            }
+        }
+        ticketsText += "</html>";
+        return ticketsText;
+    }
+
+    // Format a single ticket line based on the ticket's showing and seat
+    private String formatTicketLine(Ticket t) {
+        String ticketLine = "";
+        Showing sh = findShowing(t.getShowingId());
+        if (sh != null) {
+            // For double features, just label both movies in the line.
+            String movieName = "";
+            if (sh instanceof DoubleFeature) {
+                int[] ids = ((DoubleFeature) sh).getMovieIds();
+                Movie m1 = frame.getManager().getMovieById(ids[0]);
+                Movie m2 = frame.getManager().getMovieById(ids[1]);
+                String n1 = m1 != null ? m1.getName() : ("#" + ids[0]);
+                String n2 = m2 != null ? m2.getName() : ("#" + ids[1]);
+                movieName = n1 + " + " + n2;
+            } else {
+                Movie m = frame.getManager().getMovieById(sh.getMovieId());
+                movieName = m != null ? m.getName() : ("#" + sh.getMovieId());
+            }
+            ticketLine += movieName + " — " + frame.getManager().formatShowingTime(sh);
+        } else {
+            ticketLine += "Showing #" + t.getShowingId();
+        }
+        if (t instanceof SeatedTicket) {
+            int seatId = ((SeatedTicket) t).getSeatId();
+            String label = frame.getManager().getSeatLabel(seatId);
+            ticketLine += " — Seat " + (label != null ? label : ("#" + seatId));
+        } else {
+            ticketLine += " — General admission";
+        }
+        return ticketLine;
+    }
+
+    // Find the showing in the schedule that has the given showing id
+    private Showing findShowing(int showingId) {
+        for (int i = 0; i < frame.getManager().getSchedule().getShowings().size(); i++) {
+            Showing sh = frame.getManager().getSchedule().getShowings().get(i);
+            if (sh.getShowingId() == showingId) {
+                return sh;
+            }
+        }
+        return null;
+    }
+
+    // Build the text for the foods the customer has purchased
+    private String buildFoodsText(Customer customer) {
+        if (customer.getFoods() == null || customer.getFoods().size() == 0) {
+            return "None";
+        }
+        String foodsText = "";
+        for (int i = 0; i < customer.getFoods().size(); i++) {
+            if (i > 0) {
+                foodsText += ", ";
+            }
+            Food f = customer.getFoods().get(i);
+            foodsText += f.getName().replace('_', ' ');
+        }
+        return foodsText;
     }
 
     private static void addFormRow(JPanel panel, GridBagConstraints gbc, int row, JLabel label, JTextField field) {

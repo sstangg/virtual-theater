@@ -1,5 +1,8 @@
 package front_end.TicketBooking;
 
+import backend.TheaterSchedule.Movie;
+import backend.TheaterSchedule.Showing;
+import front_end.BookingDraft;
 import front_end.IRefreshable;
 import front_end.TheaterFrame;
 
@@ -286,7 +289,7 @@ public class SearchMovies extends JPanel implements IRefreshable {
                     JButton timeButton = new JButton(time);
                     timeButton.addActionListener(actionEvent -> {
                         selectedMovie[6] = time;
-                        frame.openSeatChart(selectedMovie);
+                        startBooking((String) name, (String) location, time);
                     });
                     showtimesPanel.add(timeButton);
                 }
@@ -298,6 +301,26 @@ public class SearchMovies extends JPanel implements IRefreshable {
 
     private String[] getShowtimes(String showtimes) {
         return showtimes.split(", ");
+    }
+
+    // Create a booking draft to start the booking process
+    private void startBooking(String movieName, String location, String time) {
+        Movie clickedMovie = frame.getManager().getMovieByName(movieName);
+        Showing showing = frame.getManager().findShowing(clickedMovie.getMovieId(), time);
+
+        BookingDraft draft = new BookingDraft();
+        draft.setMovie(clickedMovie);
+        draft.setShowing(showing);
+        draft.setLocation(location);
+        draft.setShowtime(time);
+        frame.setBookingDraft(draft);
+
+        // If the location is indoor, open the seat chart, otherwise open the food selection directly
+        if ("Indoor".equals(location)) {
+            frame.openSeatChart();
+        } else {
+            frame.openFoodSelection();
+        }
     }
 
     private void updateMoviesTable(String[][] rows) {
