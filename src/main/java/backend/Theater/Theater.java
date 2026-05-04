@@ -24,6 +24,7 @@ public abstract class Theater {
     public int getCapacity() { return capacity; }
     public SeatingStrategy getSeatingStrategy() { return seatingStrategy; }
     public TheaterType getType() { return type; }
+    public Schedule getSchedule() { return schedule; }
 
     public void setSchedule(Schedule schedule) {
         this.schedule = schedule;

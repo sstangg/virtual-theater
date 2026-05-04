@@ -29,7 +29,7 @@ public class TheaterFrame extends JFrame {
     private TheaterLobby theaterLobbyPanel;
     private SearchMovies searchMoviesPanel;
     private SeatChart seatChartPanel;
-    private ComfirmationPage ticketConfirmationPanel;
+    private ConfirmationPage ticketConfirmationPanel;
     private CustomerProfile customerProfilePanel;
 
     public TheaterFrame(String[][] searchMovieRows) {
@@ -43,7 +43,7 @@ public class TheaterFrame extends JFrame {
         theaterLobbyPanel = new TheaterLobby(this);
         searchMoviesPanel = new SearchMovies(this, searchMovieRows);
         seatChartPanel = new SeatChart(this, new String[] { "", "", "", "", "", "", "" });
-        ticketConfirmationPanel = new ComfirmationPage(this);
+        ticketConfirmationPanel = new ConfirmationPage(this);
         customerProfilePanel = new CustomerProfile(this, customerInfo);
 
         // Add the panels to the cardLayout
