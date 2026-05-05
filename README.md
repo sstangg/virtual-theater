@@ -2,6 +2,9 @@
 ---------------------------------------------------------------------------
 - Logan Zhou, Minh Dinh, Sophia Tang
 
+Find our presentation here: 
+https://docs.google.com/presentation/d/1Uw6YTuSnk4zRH8-V8do-t2Vm33yewrlI46_t3zceE8A/edit?slide=id.p#slide=id.p
+
 ## Files
 ---------------------------------------------------------------------------
 /java
@@ -71,6 +74,16 @@
   - SearchMovies
   - SeatChart
 
+- /TicketBooking
+  - DriveInTheaterPage
+  - IndoorTheaterPage
+  - OutdoorTheaterPage
+
+- /Images - image placeholders for movie watching
+- /DataManagers
+  - BookingDraft
+  - testManager - majority of the frontend / backend communication logic lives here.
+
 /database
 - food.txt - list of food items represented as Food objects & sold by ConcessionStand & FoodDelivery. packaged food is sold through FoodDelivery, while ConcessionStand sells non-packaged foods
 - movies.txt - list of movies represented as Movie objects to be shown at a theater. Each movie is limited to 1 theater type for simplicity's sake
@@ -103,35 +116,32 @@ Design Decisions:
 8. Seat Types - Indoor seats now include Basic, Enhanced, and Luxury. Luxury seats are in the center. Enhanced seats are around them. Basic seats are outside.
 9. Seat UI - SeatChart uses different button colors and letters for seat types: B, E, and L. Confirmation and customer tickets show seat type.
 
-//TODO:------------------------------------------------------------------------------------
-- Migrating the sold-tickets list from testManager into SeatedTheaterManager.
-
 ## Division of Work
 ---------------------------------------------------------------------------
 
 Everyone
 - UML diagram
--
 
 Minh
 - Designed GUI
 - Implemented frontend
+- Merging
 - Data files
 - Git management
 
 Logan
 - Implemented backend
+- Frontend (Premium seat selection, seat chart, UI)
 - README
 - Presentation slides
 
 Sophia
 - Implemented backend
-- Frontend implement(part of it )
+- Frontend implement(Watching Movie flow)
 - README
-- Watching Movie flow implement
 - Presentation slides
 
-## How to compile and run [Waiting for revision]
+## How to compile and run
 ---------------------------------------------------------------------------
 
 1. Navigate to the `virtual-theater/` directory after unzipping the files.
