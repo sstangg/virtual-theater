@@ -18,6 +18,7 @@ public class TheaterFrame extends JFrame {
     // Constants for the card layout
     public static final String CARD_WELCOME = "welcome";
     public static final String CARD_THEATER_LOBBY = "theaterLobby";
+    public static final String CARD_CHOOSE_THEATER_TYPE = "chooseTheaterType";
     public static final String CARD_SEARCH_MOVIES = "searchMovies";
     public static final String CARD_SEAT_CHART = "seatChart";
     public static final String CARD_FOOD_SELECTION = "foodSelection";
@@ -41,6 +42,7 @@ public class TheaterFrame extends JFrame {
     // The pages that are in the application
     private WelcomePanel welcomePanel;
     private TheaterLobby theaterLobbyPanel;
+    private ChooseTheaterTypePanel chooseTheaterTypePanel;
     private SearchMovies searchMoviesPanel;
     private SeatChart seatChartPanel;
     private FoodSelectionPanel foodSelectionPanel;
@@ -66,6 +68,7 @@ public class TheaterFrame extends JFrame {
         // Create the panels for the cards
         welcomePanel = new WelcomePanel(this);
         theaterLobbyPanel = new TheaterLobby(this);
+        chooseTheaterTypePanel = new ChooseTheaterTypePanel(this);
         searchMoviesPanel = new SearchMovies(this, searchMovieRows);
         seatChartPanel = new SeatChart(this);
         foodSelectionPanel = new FoodSelectionPanel(this, manager);
@@ -77,6 +80,7 @@ public class TheaterFrame extends JFrame {
         applyCardSurface(
                 welcomePanel,
                 theaterLobbyPanel,
+                chooseTheaterTypePanel,
                 searchMoviesPanel,
                 seatChartPanel,
                 foodSelectionPanel,
@@ -87,6 +91,7 @@ public class TheaterFrame extends JFrame {
         // Add the panels to the cardLayout
         cards.add(welcomePanel, CARD_WELCOME);
         cards.add(theaterLobbyPanel, CARD_THEATER_LOBBY);
+        cards.add(chooseTheaterTypePanel, CARD_CHOOSE_THEATER_TYPE);
         cards.add(searchMoviesPanel, CARD_SEARCH_MOVIES);
         cards.add(seatChartPanel, CARD_SEAT_CHART);
         cards.add(foodSelectionPanel, CARD_FOOD_SELECTION);
@@ -97,6 +102,7 @@ public class TheaterFrame extends JFrame {
         // Add the refreshable panels to the map
         refreshablePanels.put(CARD_WELCOME, (IRefreshable) welcomePanel);
         refreshablePanels.put(CARD_THEATER_LOBBY, (IRefreshable) theaterLobbyPanel);
+        refreshablePanels.put(CARD_CHOOSE_THEATER_TYPE, (IRefreshable) chooseTheaterTypePanel);
         refreshablePanels.put(CARD_SEARCH_MOVIES, (IRefreshable) searchMoviesPanel);
         refreshablePanels.put(CARD_CUSTOMER_PROFILE, (IRefreshable) customerProfilePanel);
 

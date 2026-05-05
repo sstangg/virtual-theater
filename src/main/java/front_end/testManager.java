@@ -44,7 +44,7 @@ public class testManager {
     private final HashMap<Integer, String> seatIdToLabel;
     private final HashMap<String, Seat> labelToSeat;
 
-    // Global sold-ticket list (TODO: migrate ownership to SeatedTheaterManager).
+    // Global sold-ticket list
     private final ArrayList<Ticket> soldTickets;
 
     // Customer roster created on welcome.
@@ -234,7 +234,6 @@ public class testManager {
     // --- Purchase finalization ------------------------------------------------------------
 
     // Build the tickets and attach them to the customer and the global sold-ticket list
-    // TODO: when SeatedTheaterManager owns the global ticket list, this method should move there
     public ArrayList<Ticket> completePurchase(BookingDraft draft, Customer customer) {
         ArrayList<Ticket> created = new ArrayList<Ticket>();
 
