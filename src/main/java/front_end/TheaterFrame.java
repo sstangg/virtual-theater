@@ -44,7 +44,13 @@ public class TheaterFrame extends JFrame {
     private String[] customerInfo = new String[] { "", "", "", "", "", "", "", "", "", "" };
 
     private final CardLayout cardLayout = new CardLayout();
-    // TODO: Update looks for cards
+    /*
+     * This is the “stack” of screens.
+     * CardLayout lets us switch between pages by name (welcome, lobby, etc.).
+     *
+     * We keep this panel transparent so the root wrapper (`ThemedShell`) can paint the
+     * background image behind it.
+     */
     private final JPanel cards = ThemedShell.createCardsPanel(cardLayout);
     private final HashMap<String, IRefreshable> refreshablePanels = new HashMap<>();
 
@@ -96,6 +102,7 @@ public class TheaterFrame extends JFrame {
         watchDriveinMovies = new WatchDriveinMovies(this);
 
         // TODO: Update looks for cards
+        // Apply the card surface to the panels
         applyCardSurface(
                 welcomePanel,
                 theaterLobbyPanel,
@@ -135,7 +142,12 @@ public class TheaterFrame extends JFrame {
 
         refreshablePanels.put(CARD_CUSTOMER_PROFILE, (IRefreshable) customerProfilePanel);
 
-        // Themed shell: curtain background + header + frosted card stack
+        /*
+         * ThemedShell is the simple visual wrapper:
+         * - paints background image
+         * - adds a solid header with text
+         * - paints a low-opacity outer border overlay
+         */
         add(new ThemedShell(cards));
         cardLayout.show(cards, CARD_WELCOME);
     }
