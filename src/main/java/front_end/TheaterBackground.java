@@ -16,17 +16,9 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 /*
- * ThemedShell is a simple “wrapper” panel for the whole app window.
- *
- * It does 3 simple things (matching your requirements):
- * 1) Retrieve the picture and paint it as the background.
- * 2) Add a solid-color header with text.
- * 3) Paint a low-opacity “outer frame” (a translucent border overlay).
- *
- * Everything is intentionally kept straightforward and heavily commented so it is
- * easy to read and modify.
+ * TheaterBackground is a wrapper that contains the background image, header, and card area sheet with transparency
  */
-public final class ThemedShell extends JPanel {
+public final class TheaterBackground extends JPanel {
 
     private static final String CURTAIN_FILE = "Images/TheaterCurtains.png";
 
@@ -41,7 +33,7 @@ public final class ThemedShell extends JPanel {
     // Reference to the center wrapper panel
     private final JPanel centerWrapper;
 
-    public ThemedShell(JPanel cardStack) {
+    public TheaterBackground(JPanel cardStack) {
         super(new BorderLayout());
 
         // Set the panel to be transparent
@@ -93,7 +85,7 @@ public final class ThemedShell extends JPanel {
 
     // Retrieve the curtain picture from the classpath
     private static BufferedImage readBackgroundImage() {
-        InputStream input = ThemedShell.class.getResourceAsStream(CURTAIN_FILE);
+        InputStream input = TheaterBackground.class.getResourceAsStream(CURTAIN_FILE);
         if (input == null) {
             return null;
         }

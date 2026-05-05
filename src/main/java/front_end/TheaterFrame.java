@@ -35,7 +35,7 @@ public class TheaterFrame extends JFrame {
      * We keep this panel transparent so the root wrapper (`ThemedShell`) can paint the
      * background image behind it.
      */
-    private final JPanel cards = ThemedShell.createCardsPanel(cardLayout);
+    private final JPanel cards = TheaterBackground.createCardsPanel(cardLayout);
     private final HashMap<String, IRefreshable> refreshablePanels = new HashMap<>();
 
     // The pages that are in the application
@@ -106,7 +106,7 @@ public class TheaterFrame extends JFrame {
          * - adds a solid header with text
          * - paints a low-opacity outer border overlay
          */
-        add(new ThemedShell(cards));
+        add(new TheaterBackground(cards));
         cardLayout.show(cards, CARD_WELCOME);
     }
 
