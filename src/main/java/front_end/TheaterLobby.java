@@ -11,6 +11,10 @@ import javax.swing.JLabel;
 import javax.swing.JButton;
 import javax.swing.SwingConstants;
 
+/*
+ * TheaterLobby is the panel that the user sees when they are in the theater lobby.
+ * It allows the user to choose whether to browse movies, watch a movie, or view their customer profile.
+ */
 public class TheaterLobby extends JPanel implements IRefreshable {
 
     private String userName;
@@ -74,6 +78,7 @@ public class TheaterLobby extends JPanel implements IRefreshable {
         this.add(exitTheaterButtonHolderPanel, constraints);
     }
 
+    // Refresh the cache information of the panel
     @Override
     public void refreshCache() {
         userName = frame.getUserName();
