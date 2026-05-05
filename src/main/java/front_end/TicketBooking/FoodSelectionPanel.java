@@ -1,9 +1,9 @@
 package front_end.TicketBooking;
 
 import backend.FoodService.Food;
-import front_end.BookingDraft;
 import front_end.TheaterFrame;
-import front_end.testManager;
+import front_end.DataManagers.BookingDraft;
+import front_end.DataManagers.testManager;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;

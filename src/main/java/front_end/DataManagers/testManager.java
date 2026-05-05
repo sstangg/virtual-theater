@@ -1,4 +1,4 @@
-package front_end;
+package front_end.DataManagers;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -44,7 +44,7 @@ public class testManager {
     private final HashMap<Integer, String> seatIdToLabel;
     private final HashMap<String, Seat> labelToSeat;
 
-    // Global sold-ticket list (TODO: migrate ownership to SeatedTheaterManager).
+    // Global sold-ticket list
     private final ArrayList<Ticket> soldTickets;
 
     // Customer roster created on welcome.
@@ -168,6 +168,45 @@ public class testManager {
         return null;
     }
 
+    // Find a showing by its ID
+    public Showing findShowingById(int showingId) {
+        ArrayList<Showing> showings = schedule.getShowings();
+        for (int i = 0; i < showings.size(); i++) {
+            Showing sh = showings.get(i);
+            if (sh.getShowingId() == showingId) {
+                return sh;
+            }
+        }
+        return null;
+    }
+
+    // True if the customer owns a ticket for any showing in the given theater type.
+    public boolean customerHasTicketForTheaterType(Customer customer, TheaterType theaterType) {
+        // loop through the customer's tickets
+        for (int i = 0; i < customer.getTickets().size(); i++) {
+            Ticket t = customer.getTickets().get(i);
+            Showing sh = findShowingById(t.getShowingId());
+
+            // If the showing is a double feature, check if the movie id is one of the two movies in the double feature
+            if (sh instanceof DoubleFeature) {
+                int[] ids = ((DoubleFeature) sh).getMovieIds();
+                for (int j = 0; j < ids.length; j++) {
+                    Movie m = getMovieById(ids[j]);
+                    if (m != null && m.getTheaterType() == theaterType) {
+                        return true;
+                    }
+                }
+            } else { // If the showing is a single feature, check the movie id
+                Movie m = getMovieById(sh.getMovieId());
+                if (m != null && m.getTheaterType() == theaterType) {
+                    return true;
+                }
+            }
+        }
+        // If no ticket is found, return false
+        return false;
+    }
+
     // Indoor seat grid -----------------------------------------------------------------
 
     public IndoorTheater getIndoorTheater() {
@@ -234,7 +273,6 @@ public class testManager {
     // --- Purchase finalization ------------------------------------------------------------
 
     // Build the tickets and attach them to the customer and the global sold-ticket list
-    // TODO: when SeatedTheaterManager owns the global ticket list, this method should move there
     public ArrayList<Ticket> completePurchase(BookingDraft draft, Customer customer) {
         ArrayList<Ticket> created = new ArrayList<Ticket>();
 
@@ -489,6 +527,5 @@ public class testManager {
             e.printStackTrace();
         }
     }
-
-
+ 
 }

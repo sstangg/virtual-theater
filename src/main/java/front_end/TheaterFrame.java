@@ -7,6 +7,12 @@ import javax.swing.JPanel;
 import java.util.HashMap;
 
 import backend.Customer;
+import backend.Theater.TheaterType;
+import front_end.DataManagers.BookingDraft;
+import front_end.DataManagers.testManager;
+import front_end.TheaterTypes.DriveInTheaterPage;
+import front_end.TheaterTypes.OutdoorTheaterPage;
+import front_end.TheaterTypes.IndoorTheaterPage;
 import front_end.TicketBooking.*;
 
 /*
@@ -18,6 +24,10 @@ public class TheaterFrame extends JFrame {
     // Constants for the card layout
     public static final String CARD_WELCOME = "welcome";
     public static final String CARD_THEATER_LOBBY = "theaterLobby";
+    public static final String CARD_CHOOSE_THEATER_TYPE = "chooseTheaterType";
+    public static final String CARD_OUTDOOR_THEATER = "outdoorTheater";
+    public static final String CARD_DRIVEIN_THEATER = "driveInTheater";
+    public static final String CARD_INDOOR_THEATER = "indoorTheater";
     public static final String CARD_SEARCH_MOVIES = "searchMovies";
     public static final String CARD_SEAT_CHART = "seatChart";
     public static final String CARD_FOOD_SELECTION = "foodSelection";
@@ -25,16 +35,27 @@ public class TheaterFrame extends JFrame {
     public static final String CARD_CUSTOMER_PROFILE = "customerProfile";
     public static final String CARD_PREMIUM_PAYMENT = "premiumPayment";
 
+
     private String[] customerInfo = new String[] { "", "", "", "", "", "", "", "", "", "" };
 
     private final CardLayout cardLayout = new CardLayout();
-    // TODO: Update looks for cards
-    private final JPanel cards = ThemedShell.createCardsPanel(cardLayout);
+    /*
+     * This is the “stack” of screens.
+     * CardLayout lets us switch between pages by name (welcome, lobby, etc.).
+     *
+     * We keep this panel transparent so the root wrapper (`ThemedShell`) can paint the
+     * background image behind it.
+     */
+    private final JPanel cards = TheaterBackground.createCardsPanel(cardLayout);
     private final HashMap<String, IRefreshable> refreshablePanels = new HashMap<>();
 
     // The pages that are in the application
     private WelcomePanel welcomePanel;
     private TheaterLobby theaterLobbyPanel;
+    private ChooseTheaterTypePanel chooseTheaterTypePanel;
+    private OutdoorTheaterPage outdoorTheaterPage;
+    private DriveInTheaterPage driveInTheaterPage;
+    private IndoorTheaterPage indoorTheaterPage;
     private SearchMovies searchMoviesPanel;
     private SeatChart seatChartPanel;
     private FoodSelectionPanel foodSelectionPanel;
@@ -60,6 +81,10 @@ public class TheaterFrame extends JFrame {
         // Create the panels for the cards
         welcomePanel = new WelcomePanel(this);
         theaterLobbyPanel = new TheaterLobby(this);
+        chooseTheaterTypePanel = new ChooseTheaterTypePanel(this);
+        outdoorTheaterPage = new OutdoorTheaterPage(this);
+        driveInTheaterPage = new DriveInTheaterPage(this);
+        indoorTheaterPage = new IndoorTheaterPage(this);
         searchMoviesPanel = new SearchMovies(this, searchMovieRows);
         seatChartPanel = new SeatChart(this);
         foodSelectionPanel = new FoodSelectionPanel(this, manager);
@@ -67,10 +92,14 @@ public class TheaterFrame extends JFrame {
         customerProfilePanel = new CustomerProfile(this, customerInfo);
         premiumPaymentPage = new PremiumPaymentPage(this);
 
-        // TODO: Update looks for cards
+        // Apply the card surface to the panels
         applyCardSurface(
                 welcomePanel,
                 theaterLobbyPanel,
+                chooseTheaterTypePanel,
+                outdoorTheaterPage,
+                driveInTheaterPage,
+                indoorTheaterPage,
                 searchMoviesPanel,
                 seatChartPanel,
                 foodSelectionPanel,
@@ -81,6 +110,10 @@ public class TheaterFrame extends JFrame {
         // Add the panels to the cardLayout
         cards.add(welcomePanel, CARD_WELCOME);
         cards.add(theaterLobbyPanel, CARD_THEATER_LOBBY);
+        cards.add(chooseTheaterTypePanel, CARD_CHOOSE_THEATER_TYPE);
+        cards.add(outdoorTheaterPage, CARD_OUTDOOR_THEATER);
+        cards.add(driveInTheaterPage, CARD_DRIVEIN_THEATER);
+        cards.add(indoorTheaterPage, CARD_INDOOR_THEATER);
         cards.add(searchMoviesPanel, CARD_SEARCH_MOVIES);
         cards.add(seatChartPanel, CARD_SEAT_CHART);
         cards.add(foodSelectionPanel, CARD_FOOD_SELECTION);
@@ -91,11 +124,17 @@ public class TheaterFrame extends JFrame {
         // Add the refreshable panels to the map
         refreshablePanels.put(CARD_WELCOME, (IRefreshable) welcomePanel);
         refreshablePanels.put(CARD_THEATER_LOBBY, (IRefreshable) theaterLobbyPanel);
+        refreshablePanels.put(CARD_CHOOSE_THEATER_TYPE, (IRefreshable) chooseTheaterTypePanel);
         refreshablePanels.put(CARD_SEARCH_MOVIES, (IRefreshable) searchMoviesPanel);
         refreshablePanels.put(CARD_CUSTOMER_PROFILE, (IRefreshable) customerProfilePanel);
 
-        // Themed shell: curtain background + header + frosted card stack
-        add(new ThemedShell(cards));
+        /*
+         * ThemedShell is the simple visual wrapper:
+         * - paints background image
+         * - adds a solid header with text
+         * - paints a low-opacity outer border overlay
+         */
+        add(new TheaterBackground(cards));
         cardLayout.show(cards, CARD_WELCOME);
     }
 
@@ -190,6 +229,11 @@ public class TheaterFrame extends JFrame {
     // Get the manager
     public testManager getManager() {
         return manager;
+    }
+
+    // Simple helper for UI navigation guards.
+    public boolean canEnterTheaterType(TheaterType type) {
+        return manager.customerHasTicketForTheaterType(customer, type);
     }
 
     // Apply the card surface to the panels
