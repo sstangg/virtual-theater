@@ -48,6 +48,7 @@ public class SearchMovies extends JPanel implements IRefreshable {
     private JScrollPane moviesTableScrollPane;
     private JTextArea movieDescriptionArea;
     private JPanel showtimesPanel;
+    private JLabel searchMoviesTitle;
 
     public SearchMovies(TheaterFrame frame, String[][] movieTableRows) {
         this.frame = frame;
@@ -64,7 +65,7 @@ public class SearchMovies extends JPanel implements IRefreshable {
         this.setLayout(pageLayout);
 
         // Title of the page
-        JLabel searchMoviesTitle = new JLabel();
+        searchMoviesTitle = new JLabel();
         searchMoviesTitle.setText("Search Movies");
         searchMoviesTitle.setHorizontalAlignment(SwingConstants.CENTER);
         searchMoviesTitle.setFont(searchMoviesTitle.getFont().deriveFont(18f));
@@ -331,6 +332,10 @@ public class SearchMovies extends JPanel implements IRefreshable {
 
     @Override
     public void refreshCache() {
-
+        if (frame.getCustomer() != null && frame.getCustomer().isPreferred()) {
+            searchMoviesTitle.setText("Search Movies - Premium prices active");
+        } else {
+            searchMoviesTitle.setText("Search Movies");
+        }
     }
 }

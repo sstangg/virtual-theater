@@ -1,7 +1,5 @@
 package backend.Theater;
 
-import backend.Seating.AssignedSeating;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,7 +7,7 @@ public class IndoorTheater extends Theater {
     private final List<Room> rooms;
 
     public IndoorTheater(int theaterId, List<Room> rooms) {
-        super(theaterId, TheaterType.INDOOR, totalCapacity(rooms), new AssignedSeating());
+        super(theaterId, TheaterType.INDOOR, totalCapacity(rooms));
         this.rooms = new ArrayList<>(rooms);
     }
 

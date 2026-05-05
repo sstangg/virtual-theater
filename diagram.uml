@@ -1,0 +1,651 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement>/Users/sophiatang/Documents/BU coursework/cs611/virtual-theater/src/main/java</OriginalElement>
+  <nodes>
+    <node x="-826.2754472408029" y="1049.9857146484806">backend.Tickets.Ticket</node>
+    <node x="1407.2069095794723" y="2924.6399927250704">front_end.WelcomePanel</node>
+    <node x="1409.7069095794723" y="3200.568542835232">front_end.ThemedShell.HeaderBarPanel</node>
+    <node x="2432.7071242307356" y="2901.247292857566">front_end.TicketBooking.ConfirmationPage</node>
+    <node x="4.688303783980928" y="1466.5">backend.Theater.Room</node>
+    <node x="-222.33448652680886" y="1929.2905326307014">backend.TheaterManager.SeatedTheaterManager</node>
+    <node x="-421.49926605414373" y="1784.4754159937988">backend.Theater.OutdoorTheater</node>
+    <node x="-930.81" y="648.4390744892936">backend.Tickets.TicketFactory</node>
+    <node x="2243.689916876322" y="2525.7011326980037">front_end.TicketBooking.SearchMovies</node>
+    <node x="-311.1340841046506" y="802.7005531985965">backend.Seating.BasicSeat</node>
+    <node x="-698.6174472408029" y="822.365765386342">backend.Tickets.SeatedTicket</node>
+    <node x="168.86591589534942" y="802.7005531985965">backend.Seating.EnhancedSeat</node>
+    <node x="1757.1346683902227" y="2189.6843077115304">front_end.IRefreshable</node>
+    <node x="1818.545102317984" y="3000.717957684477">front_end.CustomerProfile</node>
+    <node x="-1013.1008103769552" y="869.365765386342">backend.Tickets.UnseatedTicket</node>
+    <node x="1617.6346683902227" y="1859.7714611183876">front_end.ThemedShell</node>
+    <node x="-970.8237441897215" y="1694.0460599225207">backend.Theater.TheaterType</node>
+    <node x="-79.63408410465058" y="1026.4857146484806">backend.Seating.Seat</node>
+    <node x="707.9549534726539" y="951.1279902634365">backend.TheaterSchedule.Schedule</node>
+    <node x="1354.7069095794723" y="3358.112706456809">front_end.TicketBooking.FoodSelectionPanel</node>
+    <node x="-723.2618877132234" y="2118.451593253873">backend.TheaterManager.TheaterManager</node>
+    <node x="1818.545102317984" y="2409.7011326980037">front_end.TheaterFrame</node>
+    <node x="-124.42302949404052" y="636.9390744892937">backend.Seating.SeatFactory</node>
+    <node x="950.7879360387319" y="755.8087133329011">backend.TheaterSchedule.SingleFeature</node>
+    <node x="196.70669492820866" y="2628.016263831888">front_end.testManager</node>
+    <node x="-672.2489977469068" y="1784.4754159937988">backend.Theater.DriveInTheater</node>
+    <node x="1154.372466952526" y="905.6279902634365">backend.TheaterSchedule.Showing</node>
+    <node x="2264.59366602147" y="2317.790836819113">front_end.TheaterLobby</node>
+    <node x="1076.6258154994175" y="2930.717957684477">front_end.BookingDraft</node>
+    <node x="797.519533669486" y="2676.600925230985">Main</node>
+    <node x="-179.48923255162026" y="1765.7242425819957">backend.Theater.IndoorTheater</node>
+    <node x="2256.689916876322" y="2118.6843077115304">front_end.TicketBooking.SeatChart</node>
+    <node x="-125.68991687632206" y="2659.0207753585323">backend.Customer</node>
+    <node x="797.519533669486" y="1716.6686957688707">backend.TheaterSchedule.Movie</node>
+    <node x="312.93121679512967" y="2155.191580619243">backend.FoodService.Food</node>
+    <node x="1043.372466952526" y="489.98943640236587">backend.TheaterSchedule.ShowingFactory</node>
+    <node x="-424.99926605414373" y="1026.4857146484806">backend.Seating.SeatType</node>
+    <node x="59.90514912978074" y="2217.5810652614027">backend.FoodService.FoodDelivery</node>
+    <node x="-876.2842296016053" y="1917.7488265881968">backend.TheaterManager.DriveInTheaterManager</node>
+    <node x="-592.6848052652424" y="1432.0">backend.Theater.Theater</node>
+    <node x="-549.2395458248416" y="1929.2905326307014">backend.TheaterManager.OutdoorTheaterManager</node>
+    <node x="-285.5210443712133" y="2217.5810652614027">backend.FoodService.ConcessionStand</node>
+    <node x="-45.33448652680886" y="2089.392308955653">backend.FoodService.FoodService</node>
+    <node x="1359.1094569918753" y="708.3087133329011">backend.TheaterSchedule.DoubleFeature</node>
+    <node x="-71.13408410465058" y="802.7005531985965">backend.Seating.LuxurySeat</node>
+    <node x="1407.2069095794723" y="3081.217957684477">front_end.ThemedShell.FrostedCardsPanel</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="backend.Tickets.UnseatedTicket" target="backend.Tickets.Ticket" relationship="GENERALIZATION">
+      <point x="-1.8962304477554426E-4" y="27.000234613657994" />
+      <point x="-903.101" y="999.0" />
+      <point x="-745.775" y="999.0" />
+      <point x="4.4724080294145097E-4" y="-96.99971464848045" />
+    </edge>
+    <edge source="front_end.TicketBooking.SearchMovies" target="front_end.BookingDraft" relationship="CREATE">
+      <point x="0.0" y="96.5" />
+      <point x="2393.689916876322" y="3298.747292857566" />
+      <point x="119.5" y="178.5293351730893" />
+    </edge>
+    <edge source="backend.FoodService.ConcessionStand" target="backend.FoodService.Food" relationship="TO_MANY">
+      <point x="4.4371213306249047E-5" y="62.4999347385974" />
+      <point x="-153.521" y="2476.0" />
+      <point x="441.931" y="2476.0" />
+      <point x="-2.167951296883075E-4" y="132.0004193807572" />
+    </edge>
+    <edge source="backend.TheaterManager.OutdoorTheaterManager" target="backend.Theater.OutdoorTheater" relationship="CREATE">
+      <point x="83.74027977069784" y="-39.0" />
+      <point x="0.0" y="27.0" />
+    </edge>
+    <edge source="front_end.testManager" target="backend.TheaterSchedule.Movie" relationship="CREATE">
+      <point x="218.5" y="99.20173616811189" />
+      <point x="986.019533669486" y="3135.218" />
+      <point x="0.0" y="201.0" />
+    </edge>
+    <edge source="backend.TheaterManager.DriveInTheaterManager" target="backend.TheaterManager.TheaterManager" relationship="GENERALIZATION">
+      <point x="140.00022960160527" y="1.73411803189083E-4" />
+      <point x="-572.0" y="1956.749" />
+      <point x="-572.0" y="2013.249" />
+      <point x="-603.784" y="2013.249" />
+      <point x="-31.022112286776633" y="-223.99959325387272" />
+    </edge>
+    <edge source="front_end.TheaterFrame" target="front_end.CustomerProfile" relationship="TO_ONE">
+      <point x="98.5" y="212.5" />
+      <point x="15.0" y="-119.5" />
+    </edge>
+    <edge source="front_end.CustomerProfile" target="front_end.TheaterFrame" relationship="TO_ONE">
+      <point x="-229.00010231798387" y="4.2315522932767635E-5" />
+      <point x="1768.0" y="3120.218" />
+      <point x="1768.0" y="2868.0" />
+      <point x="1964.045" y="2868.0" />
+      <point x="-1.023179838739452E-4" y="212.49986730199635" />
+    </edge>
+    <edge source="backend.Tickets.TicketFactory" target="backend.Tickets.SeatedTicket" relationship="CREATE">
+      <point x="182.69255275919704" y="50.5" />
+      <point x="0.0" y="-74.0" />
+    </edge>
+    <edge source="front_end.BookingDraft" target="backend.TheaterSchedule.Showing" relationship="TO_ONE">
+      <point x="78.2466514531086" y="-189.5" />
+      <point x="0.0" y="143.0" />
+    </edge>
+    <edge source="backend.Seating.LuxurySeat" target="backend.Seating.Seat" relationship="GENERALIZATION">
+      <point x="8.410465058261707E-5" y="39.00044680140354" />
+      <point x="8.410465058261707E-5" y="-120.49971464848045" />
+    </edge>
+    <edge source="front_end.testManager" target="backend.TheaterSchedule.Movie" relationship="TO_MANY">
+      <point x="218.50030507179133" y="14.999736168112122" />
+      <point x="736.0" y="3051.016" />
+      <point x="736.0" y="1917.669" />
+      <point x="-188.49953366948603" y="3.04231129348409E-4" />
+    </edge>
+    <edge source="backend.Theater.DriveInTheater" target="backend.Theater.Theater" relationship="GENERALIZATION">
+      <point x="-2.253093271065154E-6" y="-27.000415993798924" />
+      <point x="-576.249" y="1756.0" />
+      <point x="-475.185" y="1756.0" />
+      <point x="-1.947347575992353E-4" y="143.5" />
+    </edge>
+    <edge source="front_end.testManager" target="backend.Theater.Room" relationship="CREATE">
+      <point x="-218.5" y="141.50473616811223" />
+      <point x="-1060.601" y="3177.521" />
+      <point x="-1060.601" y="1414.5" />
+      <point x="30.866" y="1414.5" />
+      <point x="-58.32230378398093" y="-109.0" />
+    </edge>
+    <edge source="front_end.TheaterFrame" target="front_end.TheaterLobby" relationship="CREATE">
+      <point x="145.5" y="-129.0" />
+      <point x="2367.59366602147" y="2493.2011326980037" />
+      <point x="-15.0" y="39.0" />
+    </edge>
+    <edge source="backend.TheaterSchedule.ShowingFactory" target="backend.TheaterSchedule.DoubleFeature" relationship="CREATE">
+      <point x="223.5" y="85.0" />
+      <point x="-16.236990039349166" y="-74.5" />
+    </edge>
+    <edge source="backend.FoodService.FoodDelivery" target="backend.FoodService.Food" relationship="TO_MANY">
+      <point x="-1.491297807376668E-4" y="38.9999347385974" />
+      <point x="167.405" y="2476.0" />
+      <point x="441.931" y="2476.0" />
+      <point x="-2.167951296883075E-4" y="132.0004193807572" />
+    </edge>
+    <edge source="front_end.TheaterFrame" target="backend.Customer" relationship="TO_ONE">
+      <point x="-145.50010231798387" y="13.3148673019964" />
+      <point x="651.207" y="2635.516" />
+      <point x="651.207" y="2598.0" />
+      <point x="18.81" y="2598.0" />
+      <point x="14.999916876322057" y="-235.49977535853213" />
+    </edge>
+    <edge source="backend.Seating.EnhancedSeat" target="backend.Seating.Seat" relationship="GENERALIZATION">
+      <point x="8.410465056840621E-5" y="39.00044680140354" />
+      <point x="270.866" y="954.0" />
+      <point x="30.866" y="954.0" />
+      <point x="8.410465058261707E-5" y="-120.49971464848045" />
+    </edge>
+    <edge source="backend.Theater.Theater" target="backend.TheaterSchedule.Schedule" relationship="TO_ONE">
+      <point x="117.4998052652424" y="126.5" />
+      <point x="678.0" y="1702.0" />
+      <point x="678.0" y="1048.628" />
+      <point x="-196.49995347265383" y="9.736563470141846E-6" />
+    </edge>
+    <edge source="front_end.testManager" target="backend.Theater.IndoorTheater" relationship="CREATE">
+      <point x="-119.77569492820868" y="-408.0002638318879" />
+      <point x="295.431" y="1966.0" />
+      <point x="227.0" y="1966.0" />
+      <point x="227.0" y="1828.724" />
+      <point x="123.50023255162026" y="-2.4258199573523598E-4" />
+    </edge>
+    <edge source="backend.TheaterSchedule.Movie" target="backend.Theater.TheaterType" relationship="TO_ONE">
+      <point x="-188.49953366948603" y="-33.444695768870815" />
+      <point x="145.166" y="1884.224" />
+      <point x="145.166" y="1740.0" />
+      <point x="-591.249" y="1740.0" />
+      <point x="-591.249" y="1756.0" />
+      <point x="113.49974418972158" y="11.453940077479274" />
+    </edge>
+    <edge source="front_end.TheaterFrame" target="front_end.TicketBooking.SeatChart" relationship="CREATE">
+      <point x="15.0" y="-212.5" />
+      <point x="1979.045102317984" y="2197.1843077115304" />
+      <point x="-143.5" y="16.0" />
+    </edge>
+    <edge source="backend.Seating.SeatFactory" target="backend.Seating.BasicSeat" relationship="CREATE">
+      <point x="-102.0" y="62.0" />
+      <point x="92.21105461061006" y="-39.0" />
+    </edge>
+    <edge source="front_end.TicketBooking.FoodSelectionPanel" target="front_end.BookingDraft" relationship="TO_ONE">
+      <point x="-158.49990957947216" y="-84.99970645680924" />
+      <point x="1374.707" y="2894.0" />
+      <point x="1181.126" y="2894.0" />
+      <point x="-14.999815499417537" y="-189.49995768447707" />
+    </edge>
+    <edge source="backend.TheaterManager.TheaterManager" target="backend.Theater.Theater" relationship="TO_MANY">
+      <point x="-150.5" y="0.0" />
+      <point x="-988.3237441897215" y="2342.451593253873" />
+      <point x="-988.3237441897215" y="1575.5" />
+      <point x="-117.5" y="0.0" />
+    </edge>
+    <edge source="backend.Seating.Seat" target="backend.Seating.SeatType" relationship="TO_ONE">
+      <point x="-14.999915895349417" y="-120.49971464848045" />
+      <point x="15.866" y="999.0" />
+      <point x="-321.999" y="999.0" />
+      <point x="2.66054143708061E-4" y="-50.49971464848045" />
+    </edge>
+    <edge source="front_end.CustomerProfile" target="front_end.IRefreshable" relationship="REALIZATION">
+      <point x="79.49989768201613" y="-119.49995768447707" />
+      <point x="2127.045" y="2281.0" />
+      <point x="1843.635" y="2281.0" />
+      <point x="3.3160977727675345E-4" y="26.99969228846976" />
+    </edge>
+    <edge source="front_end.testManager" target="backend.Customer" relationship="TO_MANY">
+      <point x="3.0507179133110185E-4" y="-408.0002638318879" />
+      <point x="415.207" y="2598.0" />
+      <point x="18.81" y="2598.0" />
+      <point x="14.999916876322057" y="-235.49977535853213" />
+    </edge>
+    <edge source="front_end.BookingDraft" target="backend.FoodService.Food" relationship="TO_MANY">
+      <point x="1.845005824634427E-4" y="-189.49995768447707" />
+      <point x="1196.126" y="2476.0" />
+      <point x="441.931" y="2476.0" />
+      <point x="-2.167951296883075E-4" y="132.0004193807572" />
+    </edge>
+    <edge source="front_end.BookingDraft" target="backend.Seating.Seat" relationship="TO_MANY">
+      <point x="15.000184500582463" y="-189.49995768447707" />
+      <point x="1211.126" y="1367.0" />
+      <point x="30.866" y="1367.0" />
+      <point x="8.410465058261707E-5" y="120.50028535151955" />
+    </edge>
+    <edge source="backend.Seating.SeatFactory" target="backend.Seating.EnhancedSeat" relationship="CREATE">
+      <point x="109.5" y="-46.44963808692785" />
+      <point x="270.8659158953494" y="652.4894364023659" />
+      <point x="0.0" y="-39.0" />
+    </edge>
+    <edge source="front_end.TheaterLobby" target="front_end.IRefreshable" relationship="REALIZATION">
+      <point x="3.339785298521747E-4" y="-38.999836819112716" />
+      <point x="2382.594" y="2281.0" />
+      <point x="1843.635" y="2281.0" />
+      <point x="3.3160977727675345E-4" y="26.99969228846976" />
+    </edge>
+    <edge source="backend.Tickets.SeatedTicket" target="backend.Tickets.Ticket" relationship="GENERALIZATION">
+      <point x="4.4724080294145097E-4" y="74.000234613658" />
+      <point x="-552.117" y="999.0" />
+      <point x="-745.775" y="999.0" />
+      <point x="4.4724080294145097E-4" y="-96.99971464848045" />
+    </edge>
+    <edge source="backend.TheaterManager.TheaterManager" target="backend.Customer" relationship="TO_MANY">
+      <point x="14.999887713223416" y="224.00040674612728" />
+      <point x="-557.762" y="2598.0" />
+      <point x="18.81" y="2598.0" />
+      <point x="14.999916876322057" y="-235.49977535853213" />
+    </edge>
+    <edge source="backend.TheaterSchedule.Schedule" target="backend.TheaterSchedule.Showing" relationship="TO_MANY">
+      <point x="4.652734617138776E-5" y="97.50000973656347" />
+      <point x="904.455" y="1352.0" />
+      <point x="1348.0" y="1352.0" />
+      <point x="1348.0" y="2281.0" />
+      <point x="1374.707" y="2281.0" />
+      <point x="100.334533047474" y="143.00000973656347" />
+    </edge>
+    <edge source="front_end.ThemedShell" target="front_end.ThemedShell.FrostedCardsPanel" relationship="CREATE">
+      <point x="226.00000000000023" y="-45.00046111838765" />
+      <point x="2974.207" y="1934.271" />
+      <point x="2974.207" y="3560.612706456809" />
+      <point x="1333.0" y="3560.612706456809" />
+      <point x="1333.0" y="3120.217957684477" />
+      <point x="-126.0" y="0.0" />
+    </edge>
+    <edge source="backend.Seating.SeatFactory" target="backend.Seating.LuxurySeat" relationship="CREATE">
+      <point x="45.78894538938994" y="62.0" />
+      <point x="0.0" y="-39.0" />
+    </edge>
+    <edge source="front_end.TheaterFrame" target="front_end.testManager" relationship="TO_ONE">
+      <point x="145.5" y="114.0" />
+      <point x="2929.207" y="2736.2011326980037" />
+      <point x="2929.207" y="3545.612706456809" />
+      <point x="415.20669492820866" y="3545.612706456809" />
+      <point x="0.0" y="408.0" />
+    </edge>
+    <edge source="front_end.TheaterFrame" target="front_end.TicketBooking.ConfirmationPage" relationship="CREATE">
+      <point x="145.5" y="129.0" />
+      <point x="2679.707" y="2751.2011326980037" />
+      <point x="14.999875769264236" y="-177.5" />
+    </edge>
+    <edge source="front_end.TheaterFrame" target="front_end.TicketBooking.FoodSelectionPanel" relationship="CREATE">
+      <point x="-145.5" y="58.3148673019964" />
+      <point x="1691.7069095794723" y="2680.516" />
+      <point x="158.5" y="-85.0" />
+    </edge>
+    <edge source="front_end.TheaterFrame" target="front_end.TicketBooking.SearchMovies" relationship="CREATE">
+      <point x="145.5" y="0.0" />
+      <point x="-150.0" y="0.0" />
+    </edge>
+    <edge source="backend.TheaterManager.DriveInTheaterManager" target="backend.Theater.DriveInTheater" relationship="CREATE">
+      <point x="132.5" y="-39.0" />
+      <point x="-27.53523185469851" y="27.0" />
+    </edge>
+    <edge source="front_end.testManager" target="backend.Theater.IndoorTheater" relationship="TO_ONE">
+      <point x="173.224521866921" y="-408.0" />
+      <point x="588.4312167951297" y="1813.724" />
+      <point x="123.5" y="-15.000242581995735" />
+    </edge>
+    <edge source="backend.Customer" target="backend.FoodService.Food" relationship="TO_MANY">
+      <point x="129.49991687632206" y="2.2464146786660422E-4" />
+      <point x="166.0" y="2894.521" />
+      <point x="166.0" y="2476.0" />
+      <point x="441.931" y="2476.0" />
+      <point x="-2.167951296883075E-4" y="132.0004193807572" />
+    </edge>
+    <edge source="front_end.ThemedShell.FrostedCardsPanel" target="front_end.ThemedShell" relationship="INNER_CLASS">
+      <point x="9.042052784025145E-5" y="39.00004231552293" />
+      <point x="1533.207" y="3180.0" />
+      <point x="1783.0" y="3180.0" />
+      <point x="1783.0" y="3365.613" />
+      <point x="2914.207" y="3365.613" />
+      <point x="2914.207" y="1979.271" />
+      <point x="226.0003316097775" y="-4.6111838764772983E-4" />
+    </edge>
+    <edge source="front_end.TicketBooking.SearchMovies" target="front_end.TheaterFrame" relationship="TO_ONE">
+      <point x="-149.999916876322" y="-15.000132698003654" />
+      <point x="2177.0" y="2607.201" />
+      <point x="2177.0" y="2868.0" />
+      <point x="1964.045" y="2868.0" />
+      <point x="-1.023179838739452E-4" y="212.49986730199635" />
+    </edge>
+    <edge source="front_end.ThemedShell.HeaderBarPanel" target="front_end.ThemedShell" relationship="INNER_CLASS">
+      <point x="9.042052784025145E-5" y="-38.999542835232205" />
+      <point x="1533.207" y="3180.0" />
+      <point x="1783.0" y="3180.0" />
+      <point x="1783.0" y="3365.613" />
+      <point x="2914.207" y="3365.613" />
+      <point x="2914.207" y="1979.271" />
+      <point x="226.0003316097775" y="-4.6111838764772983E-4" />
+    </edge>
+    <edge source="front_end.TheaterFrame" target="front_end.TicketBooking.SearchMovies" relationship="TO_ONE">
+      <point x="145.5" y="15.0" />
+      <point x="-150.0" y="15.0" />
+    </edge>
+    <edge source="backend.Seating.BasicSeat" target="backend.Seating.Seat" relationship="GENERALIZATION">
+      <point x="8.410465059682792E-5" y="39.00044680140354" />
+      <point x="-209.134" y="954.0" />
+      <point x="30.866" y="954.0" />
+      <point x="8.410465058261707E-5" y="-120.49971464848045" />
+    </edge>
+    <edge source="backend.Theater.IndoorTheater" target="backend.Theater.Room" relationship="TO_MANY">
+      <point x="116.0" y="-63.0" />
+      <point x="-29.17753633560119" y="109.0" />
+    </edge>
+    <edge source="backend.Customer" target="backend.Tickets.Ticket" relationship="TO_MANY">
+      <point x="-8.312367794127695E-5" y="-235.49977535853213" />
+      <point x="3.81" y="2624.0" />
+      <point x="-340.5" y="2624.0" />
+      <point x="-340.5" y="2666.521" />
+      <point x="-1030.601" y="2666.521" />
+      <point x="-1030.601" y="1146.986" />
+      <point x="-80.49955275919706" y="2.853515195511136E-4" />
+    </edge>
+    <edge source="front_end.TheaterFrame" target="front_end.WelcomePanel" relationship="TO_ONE">
+      <point x="-145.5" y="28.3148673019964" />
+      <point x="1542.207" y="2650.516" />
+      <point x="15.00009042052784" y="-39.0" />
+    </edge>
+    <edge source="front_end.WelcomePanel" target="front_end.TheaterFrame" relationship="TO_ONE">
+      <point x="9.042052784025145E-5" y="-38.99999272507057" />
+      <point x="1527.207" y="2868.0" />
+      <point x="1964.045" y="2868.0" />
+      <point x="-1.023179838739452E-4" y="212.49986730199635" />
+    </edge>
+    <edge source="backend.Theater.Theater" target="backend.Theater.TheaterType" relationship="TO_ONE">
+      <point x="14.9998052652424" y="143.5" />
+      <point x="-460.185" y="1740.0" />
+      <point x="-591.249" y="1740.0" />
+      <point x="-591.249" y="1756.0" />
+      <point x="113.49974418972158" y="11.453940077479274" />
+    </edge>
+    <edge source="front_end.WelcomePanel" target="front_end.IRefreshable" relationship="REALIZATION">
+      <point x="-14.99990957947216" y="-38.99999272507057" />
+      <point x="1512.207" y="2281.0" />
+      <point x="1843.635" y="2281.0" />
+      <point x="3.3160977727675345E-4" y="26.99969228846976" />
+    </edge>
+    <edge source="backend.Theater.Room" target="backend.Seating.Seat" relationship="TO_MANY">
+      <point x="-3.0378398092523184E-4" y="-109.0" />
+      <point x="89.188" y="1367.0" />
+      <point x="30.866" y="1367.0" />
+      <point x="8.410465058261707E-5" y="120.50028535151955" />
+    </edge>
+    <edge source="front_end.testManager" target="backend.Seating.Seat" relationship="CREATE">
+      <point x="-218.5" y="156.50473616811223" />
+      <point x="-1075.601" y="3192.521" />
+      <point x="-1075.601" y="1261.4857146484806" />
+      <point x="-110.5" y="114.5" />
+    </edge>
+    <edge source="front_end.testManager" target="backend.FoodService.Food" relationship="CREATE">
+      <point x="-14.999694928208669" y="-408.0" />
+      <point x="-41.72421679512968" y="132.0" />
+    </edge>
+    <edge source="front_end.TicketBooking.ConfirmationPage" target="front_end.BookingDraft" relationship="TO_ONE">
+      <point x="-232.00012423073576" y="-2.928575663645461E-4" />
+      <point x="2294.045" y="3078.747" />
+      <point x="2294.045" y="2894.0" />
+      <point x="1181.126" y="2894.0" />
+      <point x="-14.999815499417537" y="-189.49995768447707" />
+    </edge>
+    <edge source="front_end.testManager" target="backend.FoodService.Food" relationship="TO_MANY">
+      <point x="-218.49969492820867" y="-2.63831887878041E-4" />
+      <point x="166.0" y="3036.016" />
+      <point x="166.0" y="2476.0" />
+      <point x="441.931" y="2476.0" />
+      <point x="-2.167951296883075E-4" y="132.0004193807572" />
+    </edge>
+    <edge source="front_end.testManager" target="backend.Seating.Seat" relationship="TO_MANY">
+      <point x="202.79330507179134" y="-408.0002638318879" />
+      <point x="618.0" y="1367.0" />
+      <point x="30.866" y="1367.0" />
+      <point x="8.410465058261707E-5" y="120.50028535151955" />
+    </edge>
+    <edge source="backend.TheaterManager.SeatedTheaterManager" target="backend.Theater.IndoorTheater" relationship="CREATE">
+      <point x="167.50048652680886" y="4.6736929857615905E-4" />
+      <point x="227.0" y="1968.291" />
+      <point x="227.0" y="1828.724" />
+      <point x="123.50023255162026" y="-2.4258199573523598E-4" />
+    </edge>
+    <edge source="front_end.TicketBooking.SearchMovies" target="front_end.IRefreshable" relationship="REALIZATION">
+      <point x="124.40408312367799" y="-96.50013269800365" />
+      <point x="2518.094" y="2281.0" />
+      <point x="1843.635" y="2281.0" />
+      <point x="3.3160977727675345E-4" y="26.99969228846976" />
+    </edge>
+    <edge source="backend.Theater.OutdoorTheater" target="backend.Theater.Theater" relationship="GENERALIZATION">
+      <point x="99.50026605414374" y="-4.15993798924319E-4" />
+      <point x="-200.0" y="1811.475" />
+      <point x="-200.0" y="1756.0" />
+      <point x="-475.185" y="1756.0" />
+      <point x="-1.947347575992353E-4" y="143.5" />
+    </edge>
+    <edge source="backend.TheaterSchedule.SingleFeature" target="backend.TheaterSchedule.Showing" relationship="GENERALIZATION">
+      <point x="129.5000639612681" y="2.8666709886238095E-4" />
+      <point x="1285.0" y="782.809" />
+      <point x="1285.0" y="874.809" />
+      <point x="1366.609" y="874.809" />
+      <point x="92.23653304747381" y="-142.99999026343642" />
+    </edge>
+    <edge source="Main" target="front_end.TheaterFrame" relationship="CREATE">
+      <point x="0.0" y="-39.0" />
+      <point x="880.519533669486" y="2411.691580619243" />
+      <point x="-145.5" y="-210.50955207876086" />
+    </edge>
+    <edge source="front_end.testManager" target="backend.Tickets.Ticket" relationship="TO_MANY">
+      <point x="-218.49969492820867" y="111.50473616811223" />
+      <point x="-340.5" y="3147.521" />
+      <point x="-340.5" y="2666.521" />
+      <point x="-1030.601" y="2666.521" />
+      <point x="-1030.601" y="1146.986" />
+      <point x="-80.49955275919706" y="2.853515195511136E-4" />
+    </edge>
+    <edge source="front_end.TicketBooking.ConfirmationPage" target="front_end.TheaterFrame" relationship="TO_ONE">
+      <point x="-1.2423073576428578E-4" y="-177.50029285756636" />
+      <point x="2664.707" y="2868.0" />
+      <point x="1964.045" y="2868.0" />
+      <point x="-1.023179838739452E-4" y="212.49986730199635" />
+    </edge>
+    <edge source="front_end.TheaterFrame" target="front_end.TicketBooking.ConfirmationPage" relationship="TO_ONE">
+      <point x="145.5" y="144.0" />
+      <point x="2649.707" y="2766.2011326980037" />
+      <point x="-15.000124230735764" y="-177.5" />
+    </edge>
+    <edge source="Main" target="front_end.testManager" relationship="CREATE">
+      <point x="-83.0" y="0.0" />
+      <point x="218.5" y="-320.41533860090294" />
+    </edge>
+    <edge source="front_end.TicketBooking.SeatChart" target="front_end.TheaterFrame" relationship="TO_ONE">
+      <point x="-143.499916876322" y="-3.077115302403399E-4" />
+      <point x="2177.0" y="2181.184" />
+      <point x="2177.0" y="2868.0" />
+      <point x="1964.045" y="2868.0" />
+      <point x="-1.023179838739452E-4" y="212.49986730199635" />
+    </edge>
+    <edge source="front_end.TheaterFrame" target="front_end.TicketBooking.SeatChart" relationship="TO_ONE">
+      <point x="30.0" y="-212.5" />
+      <point x="1994.045102317984" y="2212.1843077115304" />
+      <point x="-143.5" y="31.0" />
+    </edge>
+    <edge source="front_end.TicketBooking.FoodSelectionPanel" target="backend.FoodService.Food" relationship="TO_MANY">
+      <point x="-143.49990957947216" y="-84.99970645680924" />
+      <point x="1389.707" y="2476.0" />
+      <point x="441.931" y="2476.0" />
+      <point x="-2.167951296883075E-4" y="132.0004193807572" />
+    </edge>
+    <edge source="front_end.TheaterFrame" target="front_end.BookingDraft" relationship="TO_ONE">
+      <point x="14.999897682016126" y="212.49986730199635" />
+      <point x="1979.045" y="2894.0" />
+      <point x="1181.126" y="2894.0" />
+      <point x="-14.999815499417537" y="-189.49995768447707" />
+    </edge>
+    <edge source="front_end.BookingDraft" target="backend.TheaterSchedule.Movie" relationship="TO_ONE">
+      <point x="-29.999815499417537" y="-189.5" />
+      <point x="180.10646633051397" y="201.0" />
+    </edge>
+    <edge source="backend.TheaterManager.SeatedTheaterManager" target="backend.TheaterManager.TheaterManager" relationship="GENERALIZATION">
+      <point x="4.8652680885652444E-4" y="-38.999532630701424" />
+      <point x="-54.834" y="1911.791" />
+      <point x="-572.0" y="1911.791" />
+      <point x="-572.0" y="2013.249" />
+      <point x="-603.784" y="2013.249" />
+      <point x="-31.022112286776633" y="-223.99959325387272" />
+    </edge>
+    <edge source="backend.FoodService.FoodDelivery" target="backend.FoodService.FoodService" relationship="REALIZATION">
+      <point x="-107.50014912978074" y="-6.526140259666136E-5" />
+      <point x="20.0" y="2256.581" />
+      <point x="20.0" y="2185.081" />
+      <point x="39.5" y="2185.081" />
+      <point x="5.83448652680886" y="26.999691044346946" />
+    </edge>
+    <edge source="backend.Theater.IndoorTheater" target="backend.Theater.Theater" relationship="GENERALIZATION">
+      <point x="-123.49976744837974" y="-2.4258199573523598E-4" />
+      <point x="-200.0" y="1828.724" />
+      <point x="-200.0" y="1756.0" />
+      <point x="-475.185" y="1756.0" />
+      <point x="-1.947347575992353E-4" y="143.5" />
+    </edge>
+    <edge source="backend.TheaterManager.TheaterManager" target="backend.Tickets.Ticket" relationship="TO_MANY">
+      <point x="-1.1228677658436936E-4" y="224.00040674612728" />
+      <point x="-572.762" y="2624.0" />
+      <point x="-340.5" y="2624.0" />
+      <point x="-340.5" y="2666.521" />
+      <point x="-1030.601" y="2666.521" />
+      <point x="-1030.601" y="1146.986" />
+      <point x="-80.49955275919706" y="2.853515195511136E-4" />
+    </edge>
+    <edge source="front_end.TheaterFrame" target="front_end.IRefreshable" relationship="TO_MANY">
+      <point x="-135.41010231798396" y="-212.5" />
+      <point x="-14.999668390222723" y="27.0" />
+    </edge>
+    <edge source="front_end.TheaterLobby" target="front_end.TheaterFrame" relationship="TO_ONE">
+      <point x="-117.99966602147015" y="1.631808872843976E-4" />
+      <point x="2177.0" y="2356.791" />
+      <point x="2177.0" y="2868.0" />
+      <point x="1964.045" y="2868.0" />
+      <point x="-1.023179838739452E-4" y="212.49986730199635" />
+    </edge>
+    <edge source="backend.Tickets.SeatedTicket" target="backend.Seating.SeatType" relationship="TO_ONE">
+      <point x="22.617447240802903" y="74.000234613658" />
+      <point x="-529.5" y="999.0" />
+      <point x="-321.999" y="999.0" />
+      <point x="2.66054143708061E-4" y="-50.49971464848045" />
+    </edge>
+    <edge source="front_end.TheaterFrame" target="front_end.TheaterLobby" relationship="TO_ONE">
+      <point x="145.5" y="-114.0" />
+      <point x="2382.59366602147" y="2508.2011326980037" />
+      <point x="0.0" y="39.0" />
+    </edge>
+    <edge source="backend.TheaterSchedule.DoubleFeature" target="backend.TheaterSchedule.Showing" relationship="GENERALIZATION">
+      <point x="-155.00045699187535" y="2.8666709886238095E-4" />
+      <point x="1285.0" y="782.809" />
+      <point x="1285.0" y="874.809" />
+      <point x="1366.609" y="874.809" />
+      <point x="92.23653304747381" y="-142.99999026343642" />
+    </edge>
+    <edge source="front_end.TheaterFrame" target="front_end.WelcomePanel" relationship="CREATE">
+      <point x="-145.5" y="-20.096288375189033" />
+      <point x="1625.1346683902227" y="2602.1048443228146" />
+      <point x="97.92775881075045" y="-39.0" />
+    </edge>
+    <edge source="front_end.TheaterFrame" target="front_end.TicketBooking.FoodSelectionPanel" relationship="TO_ONE">
+      <point x="-145.5" y="43.3148673019964" />
+      <point x="1676.7069095794723" y="2665.516" />
+      <point x="143.5" y="-85.0" />
+    </edge>
+    <edge source="front_end.TicketBooking.FoodSelectionPanel" target="front_end.TheaterFrame" relationship="TO_ONE">
+      <point x="178.50009042052784" y="2.93543190764467E-4" />
+      <point x="1768.0" y="3443.113" />
+      <point x="1768.0" y="2868.0" />
+      <point x="1964.045" y="2868.0" />
+      <point x="-1.023179838739452E-4" y="212.49986730199635" />
+    </edge>
+    <edge source="front_end.TicketBooking.SeatChart" target="front_end.BookingDraft" relationship="TO_ONE">
+      <point x="-143.499916876322" y="-15.00030771153024" />
+      <point x="1497.207" y="2166.184" />
+      <point x="1497.207" y="2894.0" />
+      <point x="1181.126" y="2894.0" />
+      <point x="-14.999815499417537" y="-189.49995768447707" />
+    </edge>
+    <edge source="front_end.testManager" target="backend.TheaterSchedule.Schedule" relationship="TO_ONE">
+      <point x="218.50030507179133" y="-2.63831887878041E-4" />
+      <point x="678.0" y="3036.016" />
+      <point x="678.0" y="1048.628" />
+      <point x="-196.49995347265383" y="9.736563470141846E-6" />
+    </edge>
+    <edge source="front_end.testManager" target="backend.Customer" relationship="CREATE">
+      <point x="-218.5" y="14.999736168112122" />
+      <point x="129.5" y="156.49522464146776" />
+    </edge>
+    <edge source="backend.TheaterSchedule.ShowingFactory" target="backend.TheaterSchedule.SingleFeature" relationship="CREATE">
+      <point x="-194.0845309137942" y="85.0" />
+      <point x="0.0" y="-27.0" />
+    </edge>
+    <edge source="front_end.TheaterFrame" target="front_end.ThemedShell" relationship="CREATE">
+      <point x="0.0" y="-212.5" />
+      <point x="120.41043392776123" y="119.49999999999977" />
+    </edge>
+    <edge source="backend.FoodService.ConcessionStand" target="backend.FoodService.FoodService" relationship="REALIZATION">
+      <point x="132.00004437121328" y="-6.526140259666136E-5" />
+      <point x="20.0" y="2280.081" />
+      <point x="20.0" y="2185.081" />
+      <point x="39.5" y="2185.081" />
+      <point x="5.83448652680886" y="26.999691044346946" />
+    </edge>
+    <edge source="front_end.TheaterFrame" target="front_end.CustomerProfile" relationship="CREATE">
+      <point x="83.5" y="212.5" />
+      <point x="0.0" y="-119.5" />
+    </edge>
+    <edge source="backend.Tickets.TicketFactory" target="backend.Tickets.UnseatedTicket" relationship="CREATE">
+      <point x="-168.29081037695528" y="50.5" />
+      <point x="0.0" y="-27.0" />
+    </edge>
+    <edge source="front_end.ThemedShell" target="front_end.ThemedShell.HeaderBarPanel" relationship="CREATE">
+      <point x="226.00000000000023" y="-30.000461118387648" />
+      <point x="2959.207" y="1949.271" />
+      <point x="2959.207" y="3273.747292857566" />
+      <point x="123.5" y="34.17875002233404" />
+    </edge>
+    <edge source="backend.TheaterManager.TheaterManager" target="backend.Theater.TheaterType" relationship="TO_ONE">
+      <point x="150.49988771322336" y="-142.3705932538728" />
+      <point x="130.166" y="2200.081" />
+      <point x="130.166" y="1740.0" />
+      <point x="-591.249" y="1740.0" />
+      <point x="-591.249" y="1756.0" />
+      <point x="113.49974418972158" y="11.453940077479274" />
+    </edge>
+    <edge source="backend.TheaterManager.OutdoorTheaterManager" target="backend.TheaterManager.TheaterManager" relationship="GENERALIZATION">
+      <point x="-143.50045417515844" y="4.6736929857615905E-4" />
+      <point x="-572.0" y="1968.291" />
+      <point x="-572.0" y="2013.249" />
+      <point x="-603.784" y="2013.249" />
+      <point x="-31.022112286776633" y="-223.99959325387272" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Compact" zoom="0.28717804237466754" showDependencies="true" x="1124.7253576004937" y="1657.2648061312748" />
+  <SelectedNodes />
+  <Categories>
+    <Category>Constructors</Category>
+    <Category>Fields</Category>
+    <Category>Inner Classes</Category>
+    <Category>Methods</Category>
+    <Category>Properties</Category>
+  </Categories>
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+

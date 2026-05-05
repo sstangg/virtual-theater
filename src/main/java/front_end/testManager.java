@@ -9,6 +9,7 @@ import backend.Customer;
 import backend.FoodService.Food;
 import backend.Seating.Seat;
 import backend.Seating.SeatFactory;
+import backend.Seating.SeatType;
 import backend.Theater.IndoorTheater;
 import backend.Theater.Room;
 import backend.TheaterSchedule.DoubleFeature;
@@ -61,7 +62,6 @@ public class testManager {
         this.searchMovieRows = buildSearchMovieRows(this.movies, this.schedule);
 
         // Build the indoor theatre + seat grid.
-        // TODO: introduce Enhanced/Luxury rows and their prices.
         this.seatGrid = new Seat[SEAT_ROW_COUNT][SEAT_COL_COUNT];
         this.seatIdToLabel = new HashMap<Integer, String>(); // map the seat id to the label
         this.labelToSeat = new HashMap<String, Seat>(); // map the label to the seat
@@ -69,7 +69,7 @@ public class testManager {
         Room room = new Room(1);
         for (int r = 0; r < SEAT_ROW_COUNT; r++) {
             for (int c = 0; c < SEAT_COL_COUNT; c++) {
-                Seat s = SeatFactory.createBasicSeat();
+                Seat s = createSeatForPosition(r, c);
                 room.addSeat(s); // add the seat to the room
                 seatGrid[r][c] = s; // add the seat to the seat grid
                 String label = SEAT_ROW_LABELS[r] + String.valueOf(c + 1); // create the label for the seat
@@ -201,6 +201,23 @@ public class testManager {
         return soldTickets;
     }
 
+    private Seat createSeatForPosition(int row, int col) {
+        if (isLuxuryPosition(row, col)) {
+            return SeatFactory.createLuxurySeat();
+        } else if (isEnhancedPosition(row, col)) {
+            return SeatFactory.createEnhancedSeat();
+        }
+        return SeatFactory.createBasicSeat();
+    }
+
+    private boolean isLuxuryPosition(int row, int col) {
+        return row >= 3 && row <= 5 && col >= 4 && col <= 7;
+    }
+
+    private boolean isEnhancedPosition(int row, int col) {
+        return row >= 2 && row <= 6 && col >= 2 && col <= 9;
+    }
+
     // Customer ------------------------------------------------------------------
 
     public Customer createCustomer(String name) {
@@ -228,13 +245,13 @@ public class testManager {
             ArrayList<Seat> seats = draft.getChosenSeats();
             for (int i = 0; i < seats.size(); i++) {
                 Seat s = seats.get(i);
-                SeatedTicket t = TicketFactory.createSeatedTicket(customer.getCustomerId(), showingId, s.getSeatId(), s.getType());
+                SeatedTicket t = TicketFactory.createSeatedTicket(customer.getCustomerId(), showingId, s.getSeatId(), s.getType(), customer.isPreferred());
                 customer.addTicket(t);
                 soldTickets.add(t);
                 created.add(t);
             }
         } else { // If the draft is unseated, create an unseated ticket
-            UnseatedTicket t = TicketFactory.createUnseatedTicket(customer.getCustomerId(), showingId);
+            UnseatedTicket t = TicketFactory.createUnseatedTicket(customer.getCustomerId(), showingId, customer.isPreferred());
             customer.addTicket(t);
             soldTickets.add(t);
             created.add(t);
@@ -252,20 +269,45 @@ public class testManager {
 
     // Total seat price for a draft's chosen seats.
     public double seatTotal(BookingDraft draft) {
+        return seatTotal(draft, null);
+    }
+
+    public double seatTotal(BookingDraft draft, Customer customer) {
         double total = 0.0;
-        for (int i = 0; i < draft.getChosenSeats().size(); i++) {
-            total += draft.getChosenSeats().get(i).getPrice();
+        if (!draft.isSeated()) {
+            total = TicketFactory.UNSEATED_PRICE;
+        } else {
+            for (int i = 0; i < draft.getChosenSeats().size(); i++) {
+                total += draft.getChosenSeats().get(i).getPrice();
+            }
         }
-        return total;
+        return discountedPrice(total, customer);
     }
 
     // Total food price for a draft's chosen foods.
     public double foodTotal(BookingDraft draft) {
+        return foodTotal(draft, null);
+    }
+
+    public double foodTotal(BookingDraft draft, Customer customer) {
         double total = 0.0;
         for (int i = 0; i < draft.getChosenFoods().size(); i++) {
             total += draft.getChosenFoods().get(i).getPrice();
         }
-        return total;
+        return discountedPrice(total, customer);
+    }
+
+    public double discountedPrice(double price, Customer customer) {
+        return TicketFactory.applyDiscount(price, customer != null && customer.isPreferred());
+    }
+
+    public String seatTypeLabel(SeatType type) {
+        if (type == SeatType.LUXURY) {
+            return "Luxury";
+        } else if (type == SeatType.ENHANCED) {
+            return "Enhanced";
+        }
+        return "Basic";
     }
 
     // Format a "HH:mm" time string for a given showing

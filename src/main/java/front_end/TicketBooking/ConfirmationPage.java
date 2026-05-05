@@ -39,6 +39,7 @@ public class ConfirmationPage extends JPanel {
     private JLabel foodsValueLabel;
     private JLabel seatSubtotalLabel;
     private JLabel foodSubtotalLabel;
+    private JLabel discountStatusLabel;
     private JLabel totalLabel;
 
     // Payment fields.
@@ -86,7 +87,7 @@ public class ConfirmationPage extends JPanel {
     private JPanel buildSummarySection() {
         JPanel section = new JPanel(new GridBagLayout());
         section.setBorder(createSectionBorder("Booking summary"));
-        section.setPreferredSize(new Dimension(640, 220));
+        section.setPreferredSize(new Dimension(640, 245));
 
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(4, 8, 4, 8);
@@ -100,6 +101,7 @@ public class ConfirmationPage extends JPanel {
         foodsValueLabel = new JLabel("");
         seatSubtotalLabel = new JLabel("$0.00");
         foodSubtotalLabel = new JLabel("$0.00");
+        discountStatusLabel = new JLabel("Basic pricing");
         totalLabel = new JLabel("$0.00");
         totalLabel.setFont(totalLabel.getFont().deriveFont(Font.BOLD, 14f));
 
@@ -111,6 +113,7 @@ public class ConfirmationPage extends JPanel {
         addSummaryRow(section, gbc, row++, "Food:", foodsValueLabel);
         addSummaryRow(section, gbc, row++, "Seats subtotal:", seatSubtotalLabel);
         addSummaryRow(section, gbc, row++, "Food subtotal:", foodSubtotalLabel);
+        addSummaryRow(section, gbc, row++, "Membership:", discountStatusLabel);
         addSummaryRow(section, gbc, row++, "Total:", totalLabel);
 
         return section;
@@ -171,14 +174,20 @@ public class ConfirmationPage extends JPanel {
         movieValueLabel.setText(draft.movieName());
         locationValueLabel.setText(draft.getLocation());
         showtimeValueLabel.setText(draft.getShowtime());
-        seatsValueLabel.setText(formatSeats(draft.getChosenSeats(), frame));
+        if (draft.isSeated()) {
+            seatsValueLabel.setText(formatSeats(draft.getChosenSeats(), frame));
+        } else {
+            seatsValueLabel.setText("General admission");
+        }
         foodsValueLabel.setText(formatFoods(draft.getChosenFoods()));
 
         // Set the values for the payment section
-        double seatSubtotal = frame.getManager().seatTotal(draft);
-        double foodSubtotal = frame.getManager().foodTotal(draft);
+        Customer customer = frame.getCustomer();
+        double seatSubtotal = frame.getManager().seatTotal(draft, customer);
+        double foodSubtotal = frame.getManager().foodTotal(draft, customer);
         seatSubtotalLabel.setText(formatMoney(seatSubtotal));
         foodSubtotalLabel.setText(formatMoney(foodSubtotal));
+        discountStatusLabel.setText(customer != null && customer.isPreferred() ? "Premium - 15% discount applied" : "Basic pricing");
         totalLabel.setText(formatMoney(seatSubtotal + foodSubtotal));
 
         // Reset the payment fields
@@ -311,7 +320,7 @@ public class ConfirmationPage extends JPanel {
                 seatsText += ", ";
             }
             String seatLabel = frame.getManager().getSeatLabel(seats.get(i).getSeatId());
-            seatsText += seatLabel;
+            seatsText += frame.getManager().seatTypeLabel(seats.get(i).getType()) + " Seat " + seatLabel;
         }
         return seatsText;
     }
