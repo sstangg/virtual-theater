@@ -42,7 +42,7 @@ public final class ThemedShell extends JPanel {
     private static final float HEADER_SCRIM_ALPHA = 0.50f;
     private static final float DARK_VEIL_OVER_CURTAIN = 0.20f;
 
-    private static final String CURTAIN_FILE = "Images/TheaterCurtains.png";
+    private static final String CURTAIN_FILE = "/images/TheaterCurtains.png";
 
     /** Null if the file was missing or could not be read; we then paint a simple gradient instead. */
     private final BufferedImage curtainPicture;

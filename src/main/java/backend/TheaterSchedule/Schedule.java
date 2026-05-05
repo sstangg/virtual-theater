@@ -4,6 +4,7 @@ import backend.Theater.TheaterType;
 
 import java.util.ArrayList;
 import java.util.Random;
+import java.time.LocalTime;
 
 public class Schedule {
     private ArrayList<Showing> showings;
@@ -21,6 +22,14 @@ public class Schedule {
     }
     public void addShowing(Showing s) {
         this.showings.add(s);
+    }
+    public boolean isShowingNow(int id) {
+        Showing showing = showings.get(id);
+        LocalTime now = LocalTime.now();
+        LocalTime startTime = showing.getStartTime().toLocalTime();
+        LocalTime endTime = showing.getEndTime().toLocalTime();
+
+        return now == startTime || (now.isBefore(endTime) && now.isAfter(startTime));
     }
 
     // Builds a schedule from movies based on the theater types

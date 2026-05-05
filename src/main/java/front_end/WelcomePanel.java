@@ -44,7 +44,7 @@ public class WelcomePanel extends JPanel implements IRefreshable {
         userNamePanel.add(userNameTextField);
 
         // Create the button and place it in the center of the panel
-        JButton startButton = new JButton("Enter Theatre");
+        JButton startButton = new JButton("Enter Theater Lobby");
         startButton.addActionListener(e -> {
             String userName = userNameTextField.getText();
             if (userName.isEmpty()) {
