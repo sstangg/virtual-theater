@@ -126,6 +126,20 @@ Sophia
 ## How to compile and run
 ---------------------------------------------------------------------------
 
+1. The first time you want to run, run the following instructions. No need to run them afterwards:
+
+mkdir -p out
+cp -r src/main/resources/* out/
+ 2. Then run these instructions:
+
+javac --module-path lib --add-modules javafx.controls,javafx.media,javafx.swing \
+-d out $(find src/main/java -name "*.java")
+
+java --module-path lib --add-modules javafx.controls,javafx.media,javafx.swing \
+--enable-native-access=javafx.graphics --enable-native-access=javafx.media \
+-cp out Main
+  
+  
 1. Navigate to the `virtual-theater/` directory after unzipping the files.
 2. Run the following instructions:
 

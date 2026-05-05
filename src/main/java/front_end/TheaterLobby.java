@@ -47,6 +47,7 @@ public class TheaterLobby extends JPanel implements IRefreshable {
         watchMovieButton.setText("Watch Movie");
         watchMovieButton.addActionListener(e -> {
             // TODO: Implement the logic to go to the watch movie page
+            frame.showCard(TheaterFrame.CARD_WATCH_MOVIES);
         });
         JButton customerProfileButton = new JButton("Customer Profile");
         customerProfileButton.addActionListener(e -> {

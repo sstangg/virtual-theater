@@ -15,8 +15,9 @@ public class Movie {
     private final int runtime;
     private final int releaseYear;
     private final String description;
+    private final String path;
 
-    public Movie(int movieId, String name, TheaterType theaterType, String rated, int runtime, int releaseYear, String description) {
+    public Movie(int movieId, String name, TheaterType theaterType, String rated, int runtime, int releaseYear, String description, String path) {
         this.movieId = movieId;
         this.name = name;
         this.theaterType = theaterType;
@@ -24,10 +25,14 @@ public class Movie {
         this.runtime = runtime;
         this.releaseYear = releaseYear;
         this.description = description;
+        this.path = path;
     }
 
     public int getMovieId() {
         return movieId;
+    }
+    public String getPath() {
+        return path;
     }
     public String getName() {
         return name;

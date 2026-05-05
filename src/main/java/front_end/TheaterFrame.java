@@ -4,10 +4,19 @@ import java.awt.CardLayout;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import java.time.LocalTime;
 import java.util.HashMap;
+import java.util.List;
 
 import backend.Customer;
+import backend.Theater.TheaterType;
+import backend.Tickets.Ticket;
+import front_end.WatchMovies.WatchDriveinMovies;
+import front_end.WatchMovies.WatchIndoorMovies;
+import front_end.WatchMovies.WatchMovies;
+
 import front_end.TicketBooking.*;
+import front_end.WatchMovies.WatchOutdoorMovies;
 
 /*
  * TheaterFrame is the main frame that contains all the panels for the application.
@@ -19,6 +28,13 @@ public class TheaterFrame extends JFrame {
     public static final String CARD_WELCOME = "welcome";
     public static final String CARD_THEATER_LOBBY = "theaterLobby";
     public static final String CARD_SEARCH_MOVIES = "searchMovies";
+    public static final String CARD_WATCH_MOVIES = "watchMovies";
+
+    public static final String CARD_WATCH_INDOOR_MOVIES = "watchIndoorMovies";
+    public static final String CARD_WATCH_OUTDOOR_MOVIES = "watchOutdoorMovies";
+    public static final String CARD_WATCH_DRIVEIN_MOVIES = "watchDriveInMovies";
+
+
     public static final String CARD_SEAT_CHART = "seatChart";
     public static final String CARD_FOOD_SELECTION = "foodSelection";
     public static final String CARD_TICKET_CONFIRMATION = "ticketConfirmation";
@@ -42,11 +58,17 @@ public class TheaterFrame extends JFrame {
     private WelcomePanel welcomePanel;
     private TheaterLobby theaterLobbyPanel;
     private SearchMovies searchMoviesPanel;
+    private WatchMovies watchMoviesPanel;
     private SeatChart seatChartPanel;
     private FoodSelectionPanel foodSelectionPanel;
     private ConfirmationPage ticketConfirmationPanel;
     private CustomerProfile customerProfilePanel;
     private PremiumPaymentPage premiumPaymentPage;
+
+    // theaters
+    private WatchOutdoorMovies watchOutdoorMovies;
+    private WatchDriveinMovies watchDriveinMovies;
+    private WatchIndoorMovies watchIndoorMovies;
 
     private final testManager manager;
 
@@ -67,17 +89,25 @@ public class TheaterFrame extends JFrame {
         welcomePanel = new WelcomePanel(this);
         theaterLobbyPanel = new TheaterLobby(this);
         searchMoviesPanel = new SearchMovies(this, searchMovieRows);
+        watchMoviesPanel = new WatchMovies(this);
         seatChartPanel = new SeatChart(this);
         foodSelectionPanel = new FoodSelectionPanel(this, manager);
         ticketConfirmationPanel = new ConfirmationPage(this);
         customerProfilePanel = new CustomerProfile(this, customerInfo);
         premiumPaymentPage = new PremiumPaymentPage(this);
 
+        // theaters
+        watchOutdoorMovies = new WatchOutdoorMovies(this);
+        watchIndoorMovies = new WatchIndoorMovies(this);
+        watchDriveinMovies = new WatchDriveinMovies(this);
+
+        // TODO: Update looks for cards
         // Apply the card surface to the panels
         applyCardSurface(
                 welcomePanel,
                 theaterLobbyPanel,
                 searchMoviesPanel,
+                watchMoviesPanel,
                 seatChartPanel,
                 foodSelectionPanel,
                 ticketConfirmationPanel,
@@ -88,6 +118,12 @@ public class TheaterFrame extends JFrame {
         cards.add(welcomePanel, CARD_WELCOME);
         cards.add(theaterLobbyPanel, CARD_THEATER_LOBBY);
         cards.add(searchMoviesPanel, CARD_SEARCH_MOVIES);
+
+        cards.add(watchMoviesPanel, CARD_WATCH_MOVIES);
+        cards.add(watchDriveinMovies, CARD_WATCH_INDOOR_MOVIES);
+        cards.add(watchOutdoorMovies, CARD_WATCH_OUTDOOR_MOVIES);
+        cards.add(watchDriveinMovies, CARD_WATCH_DRIVEIN_MOVIES);
+
         cards.add(seatChartPanel, CARD_SEAT_CHART);
         cards.add(foodSelectionPanel, CARD_FOOD_SELECTION);
         cards.add(ticketConfirmationPanel, CARD_TICKET_CONFIRMATION);
@@ -98,6 +134,12 @@ public class TheaterFrame extends JFrame {
         refreshablePanels.put(CARD_WELCOME, (IRefreshable) welcomePanel);
         refreshablePanels.put(CARD_THEATER_LOBBY, (IRefreshable) theaterLobbyPanel);
         refreshablePanels.put(CARD_SEARCH_MOVIES, (IRefreshable) searchMoviesPanel);
+        // TODO: add Movie?
+        refreshablePanels.put(CARD_WATCH_OUTDOOR_MOVIES, (IRefreshable) watchDriveinMovies);
+        refreshablePanels.put(CARD_WATCH_OUTDOOR_MOVIES, (IRefreshable) watchIndoorMovies);
+        refreshablePanels.put(CARD_WATCH_OUTDOOR_MOVIES, (IRefreshable) watchOutdoorMovies);
+
+
         refreshablePanels.put(CARD_CUSTOMER_PROFILE, (IRefreshable) customerProfilePanel);
 
         /*
@@ -109,6 +151,44 @@ public class TheaterFrame extends JFrame {
         add(new ThemedShell(cards));
         cardLayout.show(cards, CARD_WELCOME);
     }
+    // THEATER ENTRY FUNCTIONS ------------------------------------------------------------
+    public boolean allowNonIndoorTheaterEntry(TheaterType theaterType) {
+        if (theaterType == TheaterType.INDOOR) {
+            throw new IllegalArgumentException("Must be nonindoor theater");
+        }
+        // get customer tickets for that theater type
+        List<Ticket> tickets = manager.getTicketsForTheaterType(theaterType, customer);
+        if (tickets.isEmpty()) {return false; }
+        // get showing id
+        int playingShowingId = manager.showingIdPlayingNow(theaterType, LocalTime.now());
+        if (playingShowingId == -1) {return false; }
+
+        // search for matching showing
+        for (Ticket t : tickets) {
+            if (t.getShowingId() == playingShowingId) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean allowIndoorTheaterEntry() {
+        // TODO:
+        // check room
+        List<Ticket> tickets = manager.getTicketsForTheaterType(TheaterType.INDOOR, customer);
+        if (tickets.isEmpty()) {return false; }
+        int playingShowingId = manager.showingIdPlayingNow(TheaterType.INDOOR, LocalTime.now());
+        if (playingShowingId == -1) {return false; }
+
+        // search for matching showing
+        for (Ticket t : tickets) {
+            if (t.getShowingId() == playingShowingId) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 
     // Show the new card
     public void showCard(String name) {

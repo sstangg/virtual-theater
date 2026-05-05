@@ -35,7 +35,6 @@ public final class ThemedShell extends JPanel {
     private static final Color HEADER_COLOR = new Color(0, 0, 255, 100); // Blue
     private static final Color HEADER_TEXT_COLOR = Color.WHITE;
 
-    // Color for the card area sheet with transparency
     private static final Color CARD_AREA_SHEET_COLOR = new Color(255, 255, 255, 150);
 
     // Reference to the center wrapper panel
