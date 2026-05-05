@@ -7,8 +7,11 @@ import java.awt.Insets;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
+
+import backend.Theater.TheaterType;
 
 /*
  * ChooseTheaterTypePanel is a simple panel that lets the user choose a theater type
@@ -33,11 +36,11 @@ public class ChooseTheaterTypePanel extends JPanel implements IRefreshable {
 
         JPanel buttonsHolder = new JPanel(new FlowLayout(FlowLayout.CENTER));
         JButton indoorButton = new JButton("Indoor");
-        indoorButton.addActionListener(e -> frame.showCard(TheaterFrame.CARD_SEARCH_MOVIES));
+        indoorButton.addActionListener(e -> tryEnterTheater(TheaterType.INDOOR, TheaterFrame.CARD_INDOOR_THEATER));
         JButton outdoorButton = new JButton("Outdoor");
-        outdoorButton.addActionListener(e -> frame.showCard(TheaterFrame.CARD_OUTDOOR_THEATER));
+        outdoorButton.addActionListener(e -> tryEnterTheater(TheaterType.OUTDOOR, TheaterFrame.CARD_OUTDOOR_THEATER));
         JButton driveInButton = new JButton("Drive-In");
-        driveInButton.addActionListener(e -> frame.showCard(TheaterFrame.CARD_DRIVEIN_THEATER));
+        driveInButton.addActionListener(e -> tryEnterTheater(TheaterType.DRIVEIN, TheaterFrame.CARD_DRIVEIN_THEATER));
         buttonsHolder.add(indoorButton);
         buttonsHolder.add(outdoorButton);
         buttonsHolder.add(driveInButton);
@@ -59,6 +62,18 @@ public class ChooseTheaterTypePanel extends JPanel implements IRefreshable {
 
         constraints.gridy = 2;
         this.add(backHolder, constraints);
+    }
+
+    private void tryEnterTheater(TheaterType type, String cardName) {
+        boolean hasTicket = frame.canEnterTheaterType(type);
+        if (!hasTicket) {
+            JOptionPane.showMessageDialog(this,
+                    "You don't have a ticket for this theater.",
+                    "No Ticket",
+                    JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        frame.showCard(cardName);
     }
 
     @Override

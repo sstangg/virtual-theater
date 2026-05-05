@@ -3,10 +3,9 @@ package front_end.TheaterTypes;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.Font;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.FileInputStream;
 
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
@@ -18,19 +17,14 @@ import javax.swing.SwingConstants;
 
 import front_end.TheaterFrame;
 
-/*
- * OutdoorTheaterPage shows available Outdoor movies as posters.
- * It keeps the UI simple: posters in the middle + a back button.
- */
-public class OutdoorTheaterPage extends JPanel {
-
+public class IndoorTheaterPage extends JPanel {
     private final TheaterFrame frame;
     private final JPanel postersPanel;
 
     // Absolute path to the poster file (keeps loading simple + reliable).
-    private static final String POSTER_FILE = "src/main/java/front_end/Images/Interstellar.png";
+    private static final String POSTER_FILE = "src/main/java/front_end/Images/SouthPark.png";
 
-    public OutdoorTheaterPage(TheaterFrame frame) {
+    public IndoorTheaterPage(TheaterFrame frame) {
         super(new BorderLayout(0, 12));
         this.frame = frame;
         this.setBorder(BorderFactory.createEmptyBorder(16, 16, 16, 16));
@@ -76,4 +70,3 @@ public class OutdoorTheaterPage extends JPanel {
         }
     }
 }
-
