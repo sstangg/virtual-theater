@@ -5,7 +5,7 @@ import java.sql.Time;
 public class DoubleFeature extends Showing {
     private final int[] movieIds;
     public DoubleFeature(Movie movie1, Movie movie2, Time startTime, Time endTime) {
-        super(false, startTime, endTime);
+        super(false, startTime, endTime, movie1.getTheaterType());
         movieIds = new int[]{movie1.getMovieId(), movie2.getMovieId()};
     }
 

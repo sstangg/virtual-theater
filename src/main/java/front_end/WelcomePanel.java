@@ -16,6 +16,11 @@ import javax.swing.SwingConstants;
 
 import backend.Customer;
 
+/*
+ * WelcomePanel is the first panel that the user sees when they open the application.
+ * It allows the user to enter their name and click the "Enter Theatre" button to enter the theatre.
+ * This will create a new Customer object and store it on the frame for the session.
+ */
 public class WelcomePanel extends JPanel implements IRefreshable {
 
     private JTextField userNameTextField;
@@ -44,7 +49,7 @@ public class WelcomePanel extends JPanel implements IRefreshable {
         userNamePanel.add(userNameTextField);
 
         // Create the button and place it in the center of the panel
-        JButton startButton = new JButton("Enter Theatre");
+        JButton startButton = new JButton("Enter Theater Lobby");
         startButton.addActionListener(e -> {
             String userName = userNameTextField.getText();
             if (userName.isEmpty()) {
@@ -59,7 +64,7 @@ public class WelcomePanel extends JPanel implements IRefreshable {
         });
         startButton.setHorizontalAlignment(SwingConstants.CENTER);
 
-        // Add the label to the panel
+        // Add the components to the panel
         GridBagConstraints constraints = new GridBagConstraints(0, 0, 1, 1, 0, 0, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0);
         this.add(welcomeMessage, constraints);
         
@@ -71,6 +76,8 @@ public class WelcomePanel extends JPanel implements IRefreshable {
         this.add(startButton, constraints);
     }
     
+    // Refresh the cache information of the panel
+    @Override
     public void refreshCache() {
         String userName = frame.getUserName();
         if (userName != null) {

@@ -3,12 +3,14 @@ package front_end;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.time.LocalTime;
 import java.util.ArrayList;
 
 import backend.Customer;
 import backend.FoodService.Food;
 import backend.Seating.Seat;
 import backend.Seating.SeatFactory;
+import backend.Seating.SeatType;
 import backend.Theater.IndoorTheater;
 import backend.Theater.Room;
 import backend.TheaterSchedule.DoubleFeature;
@@ -21,7 +23,9 @@ import backend.Tickets.Ticket;
 import backend.Tickets.TicketFactory;
 import backend.Tickets.UnseatedTicket;
 
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 
 public class testManager {
     private static final String MOVIES_FILE_PATH = "src/main/java/database/movies.txt";
@@ -61,7 +65,6 @@ public class testManager {
         this.searchMovieRows = buildSearchMovieRows(this.movies, this.schedule);
 
         // Build the indoor theatre + seat grid.
-        // TODO: introduce Enhanced/Luxury rows and their prices.
         this.seatGrid = new Seat[SEAT_ROW_COUNT][SEAT_COL_COUNT];
         this.seatIdToLabel = new HashMap<Integer, String>(); // map the seat id to the label
         this.labelToSeat = new HashMap<String, Seat>(); // map the label to the seat
@@ -69,7 +72,7 @@ public class testManager {
         Room room = new Room(1);
         for (int r = 0; r < SEAT_ROW_COUNT; r++) {
             for (int c = 0; c < SEAT_COL_COUNT; c++) {
-                Seat s = SeatFactory.createBasicSeat();
+                Seat s = createSeatForPosition(r, c);
                 room.addSeat(s); // add the seat to the room
                 seatGrid[r][c] = s; // add the seat to the seat grid
                 String label = SEAT_ROW_LABELS[r] + String.valueOf(c + 1); // create the label for the seat
@@ -201,6 +204,23 @@ public class testManager {
         return soldTickets;
     }
 
+    private Seat createSeatForPosition(int row, int col) {
+        if (isLuxuryPosition(row, col)) {
+            return SeatFactory.createLuxurySeat();
+        } else if (isEnhancedPosition(row, col)) {
+            return SeatFactory.createEnhancedSeat();
+        }
+        return SeatFactory.createBasicSeat();
+    }
+
+    private boolean isLuxuryPosition(int row, int col) {
+        return row >= 3 && row <= 5 && col >= 4 && col <= 7;
+    }
+
+    private boolean isEnhancedPosition(int row, int col) {
+        return row >= 2 && row <= 6 && col >= 2 && col <= 9;
+    }
+
     // Customer ------------------------------------------------------------------
 
     public Customer createCustomer(String name) {
@@ -228,13 +248,13 @@ public class testManager {
             ArrayList<Seat> seats = draft.getChosenSeats();
             for (int i = 0; i < seats.size(); i++) {
                 Seat s = seats.get(i);
-                SeatedTicket t = TicketFactory.createSeatedTicket(customer.getCustomerId(), showingId, s.getSeatId(), s.getType());
+                SeatedTicket t = TicketFactory.createSeatedTicket(customer.getCustomerId(), showingId, s.getSeatId(), s.getType(), customer.isPreferred());
                 customer.addTicket(t);
                 soldTickets.add(t);
                 created.add(t);
             }
         } else { // If the draft is unseated, create an unseated ticket
-            UnseatedTicket t = TicketFactory.createUnseatedTicket(customer.getCustomerId(), showingId);
+            UnseatedTicket t = TicketFactory.createUnseatedTicket(customer.getCustomerId(), showingId, customer.isPreferred());
             customer.addTicket(t);
             soldTickets.add(t);
             created.add(t);
@@ -250,22 +270,136 @@ public class testManager {
         return created;
     }
 
+    // --- Movie playing logic ------------------------------------------------------------
+
+    // check if customer has tickets matching the theater
+    public List<Ticket> getTicketsForTheaterType(TheaterType type, Customer customer) {
+        List<Ticket> tickets = new ArrayList<>();
+        for (Ticket t : soldTickets) {
+            if (t.getUserId() != customer.getCustomerId()) { continue; }
+
+            Showing showing = schedule.getShowing(t.getShowingId());
+            TheaterType theaterType = showing.getTheaterType();
+
+            if (type == theaterType) {
+                tickets.add(t);
+            }
+        }
+        return tickets;
+    }
+    // return showing id playing now
+    public int showingIdPlayingNow(TheaterType type, LocalTime now) {
+        for (int i = 0; i < schedule.getShowings().size(); i++) {
+            // check theater for showing = theater
+            Showing showing = schedule.getShowing(i);
+            TheaterType theaterType = showing.getTheaterType();
+
+            if (theaterType != type) { continue; }
+
+            // check showing time is now
+            LocalTime startTime = showing.getStartTime().toLocalTime();
+            LocalTime endTime = showing.getEndTime().toLocalTime();
+
+            System.out.println("Checking showing " + showing.getShowingId()
+                    + " [" + startTime + " - " + endTime + "] vs now=" + now);
+
+            if (!now.isBefore(startTime) && now.isBefore(endTime)) {
+                return showing.getShowingId();
+            }
+        }
+        return -1;
+    }
+    // return current playing movie
+    public Movie getCurrentMovie(TheaterType type, LocalTime now) {
+        // get current showing
+        Showing showing = schedule.getShowing(showingIdPlayingNow(type, now));
+        if (showing == null) return null;
+
+        // get current movies
+        List<Movie> movies = getMoviesForShowing(showing.getShowingId());
+        if (movies.isEmpty()){ return null; }
+
+        // return movies
+        if (showing.isSingle()) {
+            LocalTime start = showing.getStartTime().toLocalTime();
+            LocalTime end = showing.getEndTime().toLocalTime();
+            System.out.println("Checking showing " + showing.getShowingId() + " " + type + " Movie :" + movies.get(0)
+                    + " [" + start + " - " + end + "] vs now=" + now);
+
+            return movies.get(0);
+        } else {
+            Movie m1 = movies.get(0);
+            Movie m2 = movies.get(1);
+
+            LocalTime start = showing.getStartTime().toLocalTime();
+
+            // assume back-to-back
+            LocalTime m1End = start.plusMinutes(m1.getRuntime());
+            System.out.println("start: " + start + "m1end: " + m1End + "now: " + now + " " + type + "Movie :" + movies.get(0));
+
+            if (now.isBefore(m1End)) {
+                return m1;
+            } else {
+                return m2;
+            }
+        }
+    }
+    // return list of movie for a showing
+    public List<Movie> getMoviesForShowing(int showingId) {
+        Showing showing = schedule.getShowing(showingId);
+        if (showing.isSingle()) {
+            return List.of(getMovieById(showing.getMovieId()));
+        } else if (showing instanceof DoubleFeature df) {
+            return List.of(
+                    getMovieById(df.getMovieIds()[0]),
+                    getMovieById(df.getMovieIds()[1])
+            );
+        }
+        return Collections.emptyList();
+    }
+
+
     // Total seat price for a draft's chosen seats.
     public double seatTotal(BookingDraft draft) {
+        return seatTotal(draft, null);
+    }
+
+    public double seatTotal(BookingDraft draft, Customer customer) {
         double total = 0.0;
-        for (int i = 0; i < draft.getChosenSeats().size(); i++) {
-            total += draft.getChosenSeats().get(i).getPrice();
+        if (!draft.isSeated()) {
+            total = TicketFactory.UNSEATED_PRICE;
+        } else {
+            for (int i = 0; i < draft.getChosenSeats().size(); i++) {
+                total += draft.getChosenSeats().get(i).getPrice();
+            }
         }
-        return total;
+        return discountedPrice(total, customer);
     }
 
     // Total food price for a draft's chosen foods.
     public double foodTotal(BookingDraft draft) {
+        return foodTotal(draft, null);
+    }
+
+    public double foodTotal(BookingDraft draft, Customer customer) {
         double total = 0.0;
         for (int i = 0; i < draft.getChosenFoods().size(); i++) {
             total += draft.getChosenFoods().get(i).getPrice();
         }
-        return total;
+        return discountedPrice(total, customer);
+    }
+
+    public double discountedPrice(double price, Customer customer) {
+        return TicketFactory.applyDiscount(price, customer != null && customer.isPreferred());
+    }
+
+    public String seatTypeLabel(SeatType type) {
+        if (type == SeatType.LUXURY) {
+            return "Luxury";
+        } else if (type == SeatType.ENHANCED) {
+            return "Enhanced";
+        }
+        return "Basic";
     }
 
     // Format a "HH:mm" time string for a given showing
@@ -402,8 +536,9 @@ public class testManager {
                     int runtime = Integer.parseInt(parts[4]);
                     int releaseYear = Integer.parseInt(parts[5]);
                     String description = parts[6];
+                    String path = parts[7];
 
-                    this.movies.add(new Movie(movieId, name, theaterType, rated, runtime, releaseYear, description));
+                    this.movies.add(new Movie(movieId, name, theaterType, rated, runtime, releaseYear, description, path));
                 } catch (Exception e) {
                     System.out.println("Due to an error, skipping line in " + fileName + ": " + line);
                     e.printStackTrace();
@@ -447,4 +582,6 @@ public class testManager {
             e.printStackTrace();
         }
     }
+
+
 }
