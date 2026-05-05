@@ -52,10 +52,10 @@
   - Food - Class of final food objects created based off of database/food.txt
 
 - /Tickets
-  - Ticket - Abstract class defining the structure of a ticket booked by a Customer. Holds ticketId, userId, and showingId. Frame only; pricing & TheaterType to be filled in.
-  - SeatedTicket - Concrete class extending the Ticket abstract class. Used for IndoorTheater bookings. Holds seatId & SeatType.
-  - UnseatedTicket - Concrete class extending the Ticket abstract class. Used for OutdoorTheater & DriveInTheater bookings.
-  - TicketFactory - Factory pattern class that creates Tickets. Used to abstract Ticket creation logic and assign unique ticketId.
+  - Ticket - Abstract class defining the structure of a ticket booked by a Customer. Holds ticketId, userId, showingId, and price.
+  - SeatedTicket - Concrete class extending the Ticket abstract class. Used for IndoorTheater bookings. Holds seatId, SeatType, and price.
+  - UnseatedTicket - Concrete class extending the Ticket abstract class. Used for OutdoorTheater & DriveInTheater bookings. Uses general admission price.
+  - TicketFactory - Factory class that creates Tickets. It sets ticket price and applies Premium discount.
 
 /frontend
 - CustomerProfile
@@ -63,9 +63,11 @@
 - TheaterFrame
 - TheaterLobby
 - WelcomePanel
+- PremiumPaymentPage
 
 - /TicketBooking
   - ConfirmationPage
+  - FoodSelectionPanel
   - SearchMovies
   - SeatChart
 
@@ -94,13 +96,15 @@ Design Decisions:
 4. Booking flow - SearchMovies builds a BookingDraft (Showing + Movie + location + time) on showtime click.
  - Indoor goes through SeatChart -> FoodSelectionPanel -> ConfirmationPage
  - Outdoor and Drive-in skip SeatChart since they're unseated
- - testManager owns the global soldTickets list (TODO: migrate to SeatedTheaterManager) and the IndoorTheater's 120 BasicSeats so the chart's A1..J12 labels map to real Seat objects.
+ - testManager owns the global soldTickets list (TODO: migrate to SeatedTheaterManager) and the IndoorTheater's 120 seats so the chart's A1..J12 labels map to real Seat objects.
 5. Purchase Confirmation - ConfirmationPage shows the order summary (with seat + food subtotals) and a simulated credit-card form. Complete Purchase is only enabled when all validation tests are passed. It proceeds to call testManager.completePurchase to create Tickets, attach them to the Customer, register them on the global sold list (so future bookings see the seats taken), and adds the chosen Foods to the Customer.
+6. Premium Member - Customer starts as Basic. Customer can buy Premium membership from CustomerProfile. Premium uses Customer.isPreferred().
+7. Premium Discount - Premium customer gets 15% off tickets and food. TicketFactory applies ticket discount. Food and confirmation pages show discounted prices.
+8. Seat Types - Indoor seats now include Basic, Enhanced, and Luxury. Luxury seats are in the center. Enhanced seats are around them. Basic seats are outside.
+9. Seat UI - SeatChart uses different button colors and letters for seat types: B, E, and L. Confirmation and customer tickets show seat type.
 
 //TODO:------------------------------------------------------------------------------------
 - Migrating the sold-tickets list from testManager into SeatedTheaterManager.
-- Ticket cancellation, real payment processing.
-
 
 ## Division of Work
 ---------------------------------------------------------------------------
@@ -113,17 +117,21 @@ Minh
 - Designed GUI
 - Implemented frontend
 - Data files
+- Git management
 
 Logan
 - Implemented backend
 - README
+- Presentation slides
 
 Sophia
 - Implemented backend
+- Frontend implement(part of it )
 - README
+- Watching Movie flow implement
 - Presentation slides
 
-## How to compile and run
+## How to compile and run [Waiting for revision]
 ---------------------------------------------------------------------------
 
 1. Navigate to the `virtual-theater/` directory after unzipping the files.
@@ -135,8 +143,3 @@ javac -d bin -sourcepath src/main/java src/main/java/Main.java
 java -cp bin Main
 ```
 
-## Input/Output Example
----------------------------------------------------------------------------
-Example execution:
-
-```
