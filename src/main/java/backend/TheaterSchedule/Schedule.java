@@ -3,6 +3,7 @@ package backend.TheaterSchedule;
 import backend.Theater.TheaterType;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 import java.time.LocalTime;
 
@@ -30,6 +31,35 @@ public class Schedule {
         LocalTime endTime = showing.getEndTime().toLocalTime();
 
         return now == startTime || (now.isBefore(endTime) && now.isAfter(startTime));
+    }
+
+    public ArrayList<Showing> getShowingsByType(TheaterType type, List<Movie> movies) {
+        ArrayList<Showing> matches = new ArrayList<Showing>();
+        for (int i = 0; i < showings.size(); i++) {
+            Showing showing = showings.get(i);
+            if (showingMatchesType(showing, type, movies)) {
+                matches.add(showing);
+            }
+        }
+        return matches;
+    }
+
+    private boolean showingMatchesType(Showing showing, TheaterType type, List<Movie> movies) {
+        if (showing instanceof DoubleFeature) {
+            int[] ids = ((DoubleFeature) showing).getMovieIds();
+            return movieHasType(ids[0], type, movies) || movieHasType(ids[1], type, movies);
+        }
+        return movieHasType(showing.getMovieId(), type, movies);
+    }
+
+    private boolean movieHasType(int movieId, TheaterType type, List<Movie> movies) {
+        for (int i = 0; i < movies.size(); i++) {
+            Movie movie = movies.get(i);
+            if (movie.getMovieId() == movieId && movie.getTheaterType() == type) {
+                return true;
+            }
+        }
+        return false;
     }
 
     // Builds a schedule from movies based on the theater types

@@ -7,6 +7,10 @@ import backend.TheaterSchedule.Showing;
 
 import java.util.ArrayList;
 
+/*
+ * BookingDraft is the draft of a booking that the user is working on.
+ * It contains the showing, movie, location, showtime, chosen seats, and chosen foods so far in the flow
+ */
 public class BookingDraft {
     private Showing showing;
     private Movie movie;
@@ -67,6 +71,7 @@ public class BookingDraft {
         }
     }
 
+    // Check if the booking is seated
     public boolean isSeated() {
         return "Indoor".equals(location);
     }
