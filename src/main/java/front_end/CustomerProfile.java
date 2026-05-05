@@ -15,6 +15,10 @@ import backend.Tickets.SeatedTicket;
 import backend.Tickets.Ticket;
 import backend.TheaterSchedule.DoubleFeature;
 
+/*
+ * CustomerProfile is the panel that allows the user to view and edit their customer profile.
+ * It also allows the user to see their tickets and foods that they have purchased.
+ */
 public class CustomerProfile extends JPanel implements IRefreshable {
     private TheaterFrame frame;
 
@@ -58,6 +62,7 @@ public class CustomerProfile extends JPanel implements IRefreshable {
         gbc.weightx = 0;
         gbc.weighty = 0;
 
+        // The information of the customer
         int row = 0;
         customerNameTextField = new JTextField(20);
         addFormRow(customerInformationPanel, gbc, row++, new JLabel("Name:"), customerNameTextField);
@@ -93,8 +98,6 @@ public class CustomerProfile extends JPanel implements IRefreshable {
             String city = customerCityTextField.getText();
             String state = customerStateTextField.getText();
             String zipCode = customerZipCodeTextField.getText();
-            // Tickets / foods columns are now fed from the real Customer object on refreshCache,
-            // so we keep their current strings just to round-trip the demographic-only array.
             String isPreferredCustomer = customerIsPreferredCustomerLabel.getText();
             String ownedTickets = customerOwnedTicketsLabel.getText();
             String ownedFoodItems = customerOwnedFoodItemsLabel.getText();
@@ -111,7 +114,7 @@ public class CustomerProfile extends JPanel implements IRefreshable {
         gbc.anchor = GridBagConstraints.EAST;
         customerInformationPanel.add(saveButton, gbc);
 
-        // Eat extra vertical space below the form so rows don't stretch.
+        // eliminate extra vertical space below the form so rows don't stretch.
         gbc.gridx = 0;
         gbc.gridy = row;
         gbc.gridwidth = 2;
@@ -124,6 +127,7 @@ public class CustomerProfile extends JPanel implements IRefreshable {
         applyCustomerInfo(customerInfo);
     }
 
+    // Apply the customer information to the panel
     private void applyCustomerInfo(String[] customerInfo) {
         if (customerInfo == null || customerInfo.length < 7) {
             return;
@@ -137,6 +141,7 @@ public class CustomerProfile extends JPanel implements IRefreshable {
         customerZipCodeTextField.setText(customerInfo[6] != null ? customerInfo[6] : "");
     }
 
+    // Refresh the cache information of the panel
     @Override
     public void refreshCache() {
         this.customerInfo = frame.getCustomerInfo();
@@ -183,24 +188,19 @@ public class CustomerProfile extends JPanel implements IRefreshable {
     private String formatTicketLine(Ticket t) {
         String ticketLine = "";
         Showing sh = findShowing(t.getShowingId());
-        if (sh != null) {
-            // For double features, just label both movies in the line.
-            String movieName = "";
-            if (sh instanceof DoubleFeature) {
-                int[] ids = ((DoubleFeature) sh).getMovieIds();
-                Movie m1 = frame.getManager().getMovieById(ids[0]);
-                Movie m2 = frame.getManager().getMovieById(ids[1]);
-                String n1 = m1 != null ? m1.getName() : ("#" + ids[0]);
-                String n2 = m2 != null ? m2.getName() : ("#" + ids[1]);
-                movieName = n1 + " + " + n2;
-            } else {
-                Movie m = frame.getManager().getMovieById(sh.getMovieId());
-                movieName = m != null ? m.getName() : ("#" + sh.getMovieId());
-            }
-            ticketLine += movieName + " — " + frame.getManager().formatShowingTime(sh);
+        String movieName = "";
+        if (sh instanceof DoubleFeature) {
+            int[] ids = ((DoubleFeature) sh).getMovieIds();
+            Movie m1 = frame.getManager().getMovieById(ids[0]);
+            Movie m2 = frame.getManager().getMovieById(ids[1]);
+            String n1 = m1.getName();
+            String n2 = m2 != null ? m2.getName() : ("#" + ids[1]);
+            movieName = n1 + " + " + n2;
         } else {
-            ticketLine += "Showing #" + t.getShowingId();
+            Movie m = frame.getManager().getMovieById(sh.getMovieId());
+            movieName = m != null ? m.getName() : ("#" + sh.getMovieId());
         }
+        ticketLine += movieName + " — " + frame.getManager().formatShowingTime(sh);
         if (t instanceof SeatedTicket) {
             int seatId = ((SeatedTicket) t).getSeatId();
             String label = frame.getManager().getSeatLabel(seatId);
@@ -233,11 +233,12 @@ public class CustomerProfile extends JPanel implements IRefreshable {
                 foodsText += ", ";
             }
             Food f = customer.getFoods().get(i);
-            foodsText += f.getName().replace('_', ' ');
+            foodsText += f.getName().replace('_', ' '); // replace underscores in backend
         }
         return foodsText;
     }
 
+    // Add a form row to the panel for a text field
     private static void addFormRow(JPanel panel, GridBagConstraints gbc, int row, JLabel label, JTextField field) {
         gbc.gridx = 0;
         gbc.gridy = row;
@@ -254,6 +255,7 @@ public class CustomerProfile extends JPanel implements IRefreshable {
         panel.add(field, gbc);
     }
 
+    // Add a form row to the panel for a label
     private static void addFormRow(JPanel panel, GridBagConstraints gbc, int row, JLabel label, JLabel valueLabel) {
         gbc.gridx = 0;
         gbc.gridy = row;
