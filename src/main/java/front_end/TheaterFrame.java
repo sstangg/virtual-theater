@@ -9,6 +9,11 @@ import java.util.HashMap;
 import backend.Customer;
 import front_end.TicketBooking.*;
 
+/*
+ * TheaterFrame is the main frame that contains all the panels for the application.
+ * It uses a CardLayout to switch between the different panels.
+ * It also holds information between the panels, and allows the different panels to be updated accordingly.
+ */
 public class TheaterFrame extends JFrame {
     // Constants for the card layout
     public static final String CARD_WELCOME = "welcome";
@@ -18,6 +23,7 @@ public class TheaterFrame extends JFrame {
     public static final String CARD_FOOD_SELECTION = "foodSelection";
     public static final String CARD_TICKET_CONFIRMATION = "ticketConfirmation";
     public static final String CARD_CUSTOMER_PROFILE = "customerProfile";
+    public static final String CARD_PREMIUM_PAYMENT = "premiumPayment";
 
     private String[] customerInfo = new String[] { "", "", "", "", "", "", "", "", "", "" };
 
@@ -34,6 +40,7 @@ public class TheaterFrame extends JFrame {
     private FoodSelectionPanel foodSelectionPanel;
     private ConfirmationPage ticketConfirmationPanel;
     private CustomerProfile customerProfilePanel;
+    private PremiumPaymentPage premiumPaymentPage;
 
     private final testManager manager;
 
@@ -58,6 +65,7 @@ public class TheaterFrame extends JFrame {
         foodSelectionPanel = new FoodSelectionPanel(this, manager);
         ticketConfirmationPanel = new ConfirmationPage(this);
         customerProfilePanel = new CustomerProfile(this, customerInfo);
+        premiumPaymentPage = new PremiumPaymentPage(this);
 
         // TODO: Update looks for cards
         applyCardSurface(
@@ -67,7 +75,8 @@ public class TheaterFrame extends JFrame {
                 seatChartPanel,
                 foodSelectionPanel,
                 ticketConfirmationPanel,
-                customerProfilePanel);
+                customerProfilePanel,
+                premiumPaymentPage);
 
         // Add the panels to the cardLayout
         cards.add(welcomePanel, CARD_WELCOME);
@@ -77,6 +86,7 @@ public class TheaterFrame extends JFrame {
         cards.add(foodSelectionPanel, CARD_FOOD_SELECTION);
         cards.add(ticketConfirmationPanel, CARD_TICKET_CONFIRMATION);
         cards.add(customerProfilePanel, CARD_CUSTOMER_PROFILE);
+        cards.add(premiumPaymentPage, CARD_PREMIUM_PAYMENT);
 
         // Add the refreshable panels to the map
         refreshablePanels.put(CARD_WELCOME, (IRefreshable) welcomePanel);
@@ -89,6 +99,7 @@ public class TheaterFrame extends JFrame {
         cardLayout.show(cards, CARD_WELCOME);
     }
 
+    // Show the new card
     public void showCard(String name) {
         // Refresh the cache information of the panel if it is refreshable
         if (refreshablePanels.containsKey(name)) {
@@ -99,14 +110,17 @@ public class TheaterFrame extends JFrame {
         cardLayout.show(cards, name);
     }
 
+    // Get the customer object
     public Customer getCustomer() {
         return customer;
     }
 
+    // Set the customer object
     public void setCustomer(Customer customer) {
         this.customer = customer;
     }
 
+    // Get the user name
     public String getUserName() {
         if (this.customer == null) {
             return "";
@@ -114,18 +128,22 @@ public class TheaterFrame extends JFrame {
         return this.customer.getName();
     }
 
+    // Set the user name
     public void setUserName(String userName) {
         this.customerInfo[0] = userName;
     }
 
+    // Get the customer information
     public String[] getCustomerInfo() {
         return customerInfo;
     }
 
+    // Set the customer information
     public void setCustomerInfo(String[] customerInfo) {
         this.customerInfo = customerInfo;
     }
 
+    // Clear the customer information
     public void clearCustomerInfo() {
         this.customerInfo = new String[] { "", "", "", "", "", "", "", "", "", "" };
         this.customer = null;
@@ -137,10 +155,12 @@ public class TheaterFrame extends JFrame {
         return bookingDraft;
     }
 
+    // Set the booking draft
     public void setBookingDraft(BookingDraft draft) {
         this.bookingDraft = draft;
     }
 
+    // Clear the booking draft
     public void clearBookingDraft() {
         this.bookingDraft = null;
     }
@@ -163,10 +183,16 @@ public class TheaterFrame extends JFrame {
         cardLayout.show(cards, CARD_TICKET_CONFIRMATION);
     }
 
+    public void openPremiumPaymentPage() {
+        cardLayout.show(cards, CARD_PREMIUM_PAYMENT);
+    }
+
+    // Get the manager
     public testManager getManager() {
         return manager;
     }
 
+    // Apply the card surface to the panels
     private static void applyCardSurface(JPanel... roots) {
         for (JPanel root : roots) {
             root.setOpaque(false);

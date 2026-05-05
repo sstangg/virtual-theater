@@ -35,10 +35,12 @@ public class FoodSelectionPanel extends JPanel {
     private final ArrayList<Food> deliveryFoods;
     private final int[] deliveryQuantities;
     private final JLabel[] deliveryCountLabels;
+    private final JLabel[] deliveryNameLabels;
 
     private final ArrayList<Food> concessionFoods;
     private final int[] concessionQuantities;
     private final JLabel[] concessionCountLabels;
+    private final JLabel[] concessionNameLabels;
 
     private final JPanel concessionOuterPanel;
 
@@ -54,10 +56,12 @@ public class FoodSelectionPanel extends JPanel {
         this.deliveryFoods = manager.getDeliveryFoods();
         this.deliveryQuantities = new int[deliveryFoods.size()];
         this.deliveryCountLabels = new JLabel[deliveryFoods.size()];
+        this.deliveryNameLabels = new JLabel[deliveryFoods.size()];
 
         this.concessionFoods = manager.getConcessionFoods();
         this.concessionQuantities = new int[concessionFoods.size()];
         this.concessionCountLabels = new JLabel[concessionFoods.size()];
+        this.concessionNameLabels = new JLabel[concessionFoods.size()];
 
         setBorder(BorderFactory.createEmptyBorder(16, 16, 16, 16));
         setLayout(new BorderLayout(0, 12));
@@ -168,8 +172,7 @@ public class FoodSelectionPanel extends JPanel {
         row.setBorder(BorderFactory.createEmptyBorder(4, 8, 4, 8));
 
         String displayName = food.getName().replace('_', ' ');
-        String nameWithPrice = displayName + "  ($" + formatMoney(food.getPrice()) + ")";
-        JLabel nameLabel = new JLabel(nameWithPrice);
+        JLabel nameLabel = new JLabel(displayName + "  ($" + formatMoney(food.getPrice()) + ")");
         nameLabel.setHorizontalAlignment(SwingConstants.LEFT);
         row.add(nameLabel, BorderLayout.WEST);
 
@@ -184,6 +187,7 @@ public class FoodSelectionPanel extends JPanel {
 
         if (isDelivery) {
             deliveryCountLabels[index] = countLabel;
+            deliveryNameLabels[index] = nameLabel;
             minus.addActionListener(e -> {
                 if (deliveryQuantities[index] > 0) {
                     deliveryQuantities[index]--;
@@ -196,6 +200,7 @@ public class FoodSelectionPanel extends JPanel {
             });
         } else {
             concessionCountLabels[index] = countLabel;
+            concessionNameLabels[index] = nameLabel;
             minus.addActionListener(e -> {
                 if (concessionQuantities[index] > 0) {
                     concessionQuantities[index]--;
@@ -237,7 +242,28 @@ public class FoodSelectionPanel extends JPanel {
         }
 
         // Set the header label to the movie name and location
-        headerLabel.setText("Add food for " + movieName + " (" + location + ")");
+        boolean premium = frame.getCustomer() != null && frame.getCustomer().isPreferred();
+        if (premium) {
+            headerLabel.setText("Add food for " + movieName + " (" + location + ") - Premium 15% off");
+        } else {
+            headerLabel.setText("Add food for " + movieName + " (" + location + ")");
+        }
+        updateFoodPriceLabels(premium);
+    }
+
+    private void updateFoodPriceLabels(boolean premium) {
+        for (int i = 0; i < deliveryFoods.size(); i++) {
+            Food food = deliveryFoods.get(i);
+            deliveryNameLabels[i].setText(food.getName().replace('_', ' ') + "  ($"
+                    + formatMoney(frame.getManager().discountedPrice(food.getPrice(), frame.getCustomer()))
+                    + (premium ? " Premium" : "") + ")");
+        }
+        for (int i = 0; i < concessionFoods.size(); i++) {
+            Food food = concessionFoods.get(i);
+            concessionNameLabels[i].setText(food.getName().replace('_', ' ') + "  ($"
+                    + formatMoney(frame.getManager().discountedPrice(food.getPrice(), frame.getCustomer()))
+                    + (premium ? " Premium" : "") + ")");
+        }
     }
 
     // Build the ordered food list from the delivery and concession quantities
