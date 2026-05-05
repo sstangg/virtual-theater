@@ -3,6 +3,8 @@ package front_end;
 import javax.swing.*;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -31,6 +33,7 @@ public class CustomerProfile extends JPanel implements IRefreshable {
     private JLabel customerIsPreferredCustomerLabel;
     private JLabel customerOwnedTicketsLabel;
     private JLabel customerOwnedFoodItemsLabel;
+    private JButton premiumButton;
 
     public CustomerProfile(TheaterFrame frame, String[] customerInfo) {
         super();
@@ -121,6 +124,12 @@ public class CustomerProfile extends JPanel implements IRefreshable {
 
         this.add(customerInformationPanel, BorderLayout.CENTER);
 
+        JPanel bottomRightPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 0, 0));
+        premiumButton = new JButton("Become a Premium Member");
+        premiumButton.addActionListener(e -> frame.openPremiumPaymentPage());
+        bottomRightPanel.add(premiumButton);
+        this.add(bottomRightPanel, BorderLayout.SOUTH);
+
         applyCustomerInfo(customerInfo);
     }
 
@@ -145,7 +154,10 @@ public class CustomerProfile extends JPanel implements IRefreshable {
         // Membership + tickets + foods come from the real Customer object on the frame.
         Customer customer = frame.getCustomer();
         if (customer != null) {
-            customerIsPreferredCustomerLabel.setText(customer.isPreferred() ? "Preferred" : "Basic");
+            customerIsPreferredCustomerLabel.setText(customer.isPreferred() ? "Premium" : "Basic");
+            customerIsPreferredCustomerLabel.setForeground(customer.isPreferred() ? new Color(145, 105, 0) : Color.BLACK);
+            premiumButton.setEnabled(!customer.isPreferred());
+            premiumButton.setText(customer.isPreferred() ? "Premium Member Active" : "Become a Premium Member");
             customerOwnedTicketsLabel.setText(buildTicketsHtml(customer));
             customerOwnedFoodItemsLabel.setText(buildFoodsText(customer));
 
@@ -156,6 +168,9 @@ public class CustomerProfile extends JPanel implements IRefreshable {
             }
         } else {
             customerIsPreferredCustomerLabel.setText("Basic");
+            customerIsPreferredCustomerLabel.setForeground(Color.BLACK);
+            premiumButton.setEnabled(false);
+            premiumButton.setText("Become a Premium Member");
             customerOwnedTicketsLabel.setText("None");
             customerOwnedFoodItemsLabel.setText("None");
         }
@@ -170,13 +185,47 @@ public class CustomerProfile extends JPanel implements IRefreshable {
         ticketsText += "<html>";
         for (int i = 0; i < customer.getTickets().size(); i++) {
             Ticket t = customer.getTickets().get(i);
-            ticketsText += formatTicketLine(t);
+            ticketsText += formatTicketLineForCustomer(t);
             if (i < customer.getTickets().size() - 1) {
                 ticketsText += "<br>";
             }
         }
         ticketsText += "</html>";
         return ticketsText;
+    }
+
+    private String formatTicketLineForCustomer(Ticket t) {
+        String ticketLine = "";
+        Showing sh = findShowing(t.getShowingId());
+        if (sh != null) {
+            String movieName = "";
+            if (sh instanceof DoubleFeature) {
+                int[] ids = ((DoubleFeature) sh).getMovieIds();
+                Movie m1 = frame.getManager().getMovieById(ids[0]);
+                Movie m2 = frame.getManager().getMovieById(ids[1]);
+                String n1 = m1 != null ? m1.getName() : ("#" + ids[0]);
+                String n2 = m2 != null ? m2.getName() : ("#" + ids[1]);
+                movieName = n1 + " + " + n2;
+            } else {
+                Movie m = frame.getManager().getMovieById(sh.getMovieId());
+                movieName = m != null ? m.getName() : ("#" + sh.getMovieId());
+            }
+            ticketLine += movieName + " - " + frame.getManager().formatShowingTime(sh);
+        } else {
+            ticketLine += "Showing #" + t.getShowingId();
+        }
+
+        if (t instanceof SeatedTicket) {
+            SeatedTicket seatedTicket = (SeatedTicket) t;
+            int seatId = seatedTicket.getSeatId();
+            String label = frame.getManager().getSeatLabel(seatId);
+            ticketLine += " - " + frame.getManager().seatTypeLabel(seatedTicket.getSeatType())
+                    + " Seat " + (label != null ? label : ("#" + seatId));
+        } else {
+            ticketLine += " - General admission";
+        }
+        ticketLine += " - $" + String.format("%.2f", t.getPrice());
+        return ticketLine;
     }
 
     // Format a single ticket line based on the ticket's showing and seat

@@ -18,6 +18,7 @@ public class TheaterFrame extends JFrame {
     public static final String CARD_FOOD_SELECTION = "foodSelection";
     public static final String CARD_TICKET_CONFIRMATION = "ticketConfirmation";
     public static final String CARD_CUSTOMER_PROFILE = "customerProfile";
+    public static final String CARD_PREMIUM_PAYMENT = "premiumPayment";
 
     private String[] customerInfo = new String[] { "", "", "", "", "", "", "", "", "", "" };
 
@@ -34,6 +35,7 @@ public class TheaterFrame extends JFrame {
     private FoodSelectionPanel foodSelectionPanel;
     private ConfirmationPage ticketConfirmationPanel;
     private CustomerProfile customerProfilePanel;
+    private PremiumPaymentPage premiumPaymentPage;
 
     private final testManager manager;
 
@@ -58,6 +60,7 @@ public class TheaterFrame extends JFrame {
         foodSelectionPanel = new FoodSelectionPanel(this, manager);
         ticketConfirmationPanel = new ConfirmationPage(this);
         customerProfilePanel = new CustomerProfile(this, customerInfo);
+        premiumPaymentPage = new PremiumPaymentPage(this);
 
         // TODO: Update looks for cards
         applyCardSurface(
@@ -67,7 +70,8 @@ public class TheaterFrame extends JFrame {
                 seatChartPanel,
                 foodSelectionPanel,
                 ticketConfirmationPanel,
-                customerProfilePanel);
+                customerProfilePanel,
+                premiumPaymentPage);
 
         // Add the panels to the cardLayout
         cards.add(welcomePanel, CARD_WELCOME);
@@ -77,6 +81,7 @@ public class TheaterFrame extends JFrame {
         cards.add(foodSelectionPanel, CARD_FOOD_SELECTION);
         cards.add(ticketConfirmationPanel, CARD_TICKET_CONFIRMATION);
         cards.add(customerProfilePanel, CARD_CUSTOMER_PROFILE);
+        cards.add(premiumPaymentPage, CARD_PREMIUM_PAYMENT);
 
         // Add the refreshable panels to the map
         refreshablePanels.put(CARD_WELCOME, (IRefreshable) welcomePanel);
@@ -161,6 +166,10 @@ public class TheaterFrame extends JFrame {
     public void openConfirmationPage() {
         ticketConfirmationPanel.setBooking(bookingDraft);
         cardLayout.show(cards, CARD_TICKET_CONFIRMATION);
+    }
+
+    public void openPremiumPaymentPage() {
+        cardLayout.show(cards, CARD_PREMIUM_PAYMENT);
     }
 
     public testManager getManager() {

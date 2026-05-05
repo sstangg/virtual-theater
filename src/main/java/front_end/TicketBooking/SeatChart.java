@@ -8,6 +8,7 @@ import javax.swing.BorderFactory;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JButton;
+import javax.swing.JOptionPane;
 
 import java.awt.Dimension;
 import java.awt.BorderLayout;
@@ -16,6 +17,7 @@ import java.awt.Color;
 import javax.swing.BoxLayout;
 
 import backend.Seating.Seat;
+import backend.Seating.SeatType;
 import front_end.BookingDraft;
 import front_end.TheaterFrame;
 
@@ -69,6 +71,11 @@ public class SeatChart extends JPanel {
         // Create the rows of seats represented by toggle buttons
         buildSeatChart();
 
+        JPanel seatChartWithLegend = new JPanel();
+        seatChartWithLegend.setLayout(new BoxLayout(seatChartWithLegend, BoxLayout.Y_AXIS));
+        seatChartWithLegend.add(seatChartPanel);
+        seatChartWithLegend.add(buildSeatLegend());
+
         // Use flow layout to not auto stretch the seat chart when the window grows
         JPanel seatChartHolder = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0));
         // Create the border for the seat chart and indicate where the screen is located
@@ -78,7 +85,7 @@ public class SeatChart extends JPanel {
                 javax.swing.border.TitledBorder.CENTER,
                 javax.swing.border.TitledBorder.TOP
         ));
-        seatChartHolder.add(seatChartPanel);
+        seatChartHolder.add(seatChartWithLegend);
 
         // Bottom region for selected seats and navigation buttons
         JPanel bottomPanel = new JPanel(new BorderLayout(0, 8));
@@ -91,6 +98,14 @@ public class SeatChart extends JPanel {
         });
         JButton continueButton = new JButton("Continue");
         continueButton.addActionListener(e -> {
+            if (currentDraft == null) {
+                JOptionPane.showMessageDialog(this, "No booking selected.", "Booking incomplete", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+            if (selectedSeats.size() == 0) {
+                JOptionPane.showMessageDialog(this, "Please choose at least one seat.", "Booking incomplete", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
             // Translate the picked labels letter number labels into real Seat objects on the draft.
             ArrayList<Seat> chosen = new ArrayList<Seat>();
             for (int i = 0; i < selectedSeats.size(); i++) {
@@ -125,19 +140,28 @@ public class SeatChart extends JPanel {
             // Create the seats in the row
             for (int j = 0; j < SEAT_COL_COUNT; j++) {
                 JToggleButton seatButton = new JToggleButton("" + SEAT_ROW_LABELS[i] + (j + 1));
+                String label = SEAT_ROW_LABELS[i] + (j + 1);
+                seatButton.setName(label);
                 seatButton.setHorizontalAlignment(SwingConstants.CENTER);
 
                 // Adjust properties of the toggle button
-                seatButton.setPreferredSize(new Dimension(40, 40));
+                seatButton.setPreferredSize(new Dimension(48, 40));
                 seatButton.setFont(seatButton.getFont().deriveFont(10f));
                 seatButton.setFocusPainted(false);
                 seatButton.setOpaque(true);
                 seatButton.setContentAreaFilled(true);
 
-                Color defaultBg = seatButton.getBackground();
-                Color defaultFg = seatButton.getForeground();
-                Color selectedBg = seatButton.getBackground().darker();
-                Color selectedFg = seatButton.getForeground().darker();
+                Seat currentSeat = frame.getManager().getSeatByLabel(label);
+                SeatType seatType = currentSeat != null ? currentSeat.getType() : SeatType.BASIC;
+                Color defaultBg = seatColor(seatType);
+                Color defaultFg = Color.BLACK;
+                Color selectedBg = defaultBg.darker();
+                Color selectedFg = Color.WHITE;
+                seatButton.setText(label + " " + seatTypeLetter(seatType));
+                seatButton.setToolTipText(label + " " + frame.getManager().seatTypeLabel(seatType)
+                        + " ($" + formatMoney(currentSeat != null ? currentSeat.getPrice() : 0.0) + ")");
+                seatButton.setBackground(defaultBg);
+                seatButton.setForeground(defaultFg);
 
                 // Update the color of the toggle button if it is selected or unselected
                 seatButton.addItemListener(itemEvent -> {
@@ -168,7 +192,9 @@ public class SeatChart extends JPanel {
         String movieName = draft.movieName();
         String location = draft.getLocation();
         String showtime = draft.getShowtime();
-        seatChartTitle.setText(movieName + " - " + location + " - " + showtime);
+        boolean premium = frame.getCustomer() != null && frame.getCustomer().isPreferred();
+        seatChartTitle.setText(movieName + " - " + location + " - " + showtime
+                + (premium ? " - Premium 15% off" : ""));
 
         // Reset selected seats
         selectedSeats.clear();
@@ -186,10 +212,16 @@ public class SeatChart extends JPanel {
                 JToggleButton btn = (JToggleButton) seatComponent;
                 btn.setSelected(false);
 
-                String label = btn.getText();
+                String label = btn.getName();
                 Seat currentSeat = frame.getManager().getSeatByLabel(label);
-                boolean booked = frame.getManager().isSeatBookedForShowing(showingId, currentSeat.getSeatId());
+                boolean booked = currentSeat != null && frame.getManager().isSeatBookedForShowing(showingId, currentSeat.getSeatId());
                 btn.setEnabled(!booked); // If the seat is booked, disable the button
+                btn.setBackground(booked ? Color.LIGHT_GRAY : seatColor(currentSeat != null ? currentSeat.getType() : SeatType.BASIC));
+                if (currentSeat != null) {
+                    btn.setToolTipText(label + " " + frame.getManager().seatTypeLabel(currentSeat.getType())
+                            + " ($" + formatMoney(frame.getManager().discountedPrice(currentSeat.getPrice(), frame.getCustomer()))
+                            + (premium ? " Premium" : "") + ")");
+                }
             }
         }
     }
@@ -212,8 +244,8 @@ public class SeatChart extends JPanel {
                     if (anySelected) {
                         selectedSeatsText += ", ";
                     }
-                    selectedSeatsText += seatButton.getText();
-                    selectedSeats.add(seatButton.getText());
+                    selectedSeatsText += seatButton.getName();
+                    selectedSeats.add(seatButton.getName());
                     anySelected = true;
                 }
             }
@@ -225,5 +257,35 @@ public class SeatChart extends JPanel {
         }
 
         return selectedSeatsText;
+    }
+
+    private JPanel buildSeatLegend() {
+        JPanel legend = new JPanel(new FlowLayout(FlowLayout.CENTER, 12, 4));
+        legend.add(new JLabel("L = Luxury"));
+        legend.add(new JLabel("E = Enhanced"));
+        legend.add(new JLabel("B = Basic"));
+        return legend;
+    }
+
+    private Color seatColor(SeatType type) {
+        if (type == SeatType.LUXURY) {
+            return new Color(236, 202, 104);
+        } else if (type == SeatType.ENHANCED) {
+            return new Color(151, 202, 219);
+        }
+        return new Color(224, 224, 224);
+    }
+
+    private String seatTypeLetter(SeatType type) {
+        if (type == SeatType.LUXURY) {
+            return "L";
+        } else if (type == SeatType.ENHANCED) {
+            return "E";
+        }
+        return "B";
+    }
+
+    private String formatMoney(double price) {
+        return String.format("%.2f", price);
     }
 }
