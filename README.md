@@ -127,12 +127,18 @@ Sophia
 ## How to compile and run
 ---------------------------------------------------------------------------
 
-1. Navigate to the directory "611-A4/src" after unzipping the files
-2. Run the following instructions:
+1. The first time you want to run, run the following instructions. No need to run them afterwards:
 
-javac --release 8 -d bin core/\*.java game/\*.java grid/\*.java hero/\*.java iohandler/\*.java main/\*.java monster/\*.java
+mkdir -p out
+cp -r src/main/resources/* out/
+ 2. Then run these instructions:
 
-java -cp bin main/Main
+javac --module-path lib --add-modules javafx.controls,javafx.media,javafx.swing \
+-d out $(find src/main/java -name "*.java")
+
+java --module-path lib --add-modules javafx.controls,javafx.media,javafx.swing \
+--enable-native-access=javafx.graphics --enable-native-access=javafx.media \
+-cp out Main
 
 ## Input/Output Example
 ---------------------------------------------------------------------------
