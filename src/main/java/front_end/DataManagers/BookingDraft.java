@@ -1,4 +1,4 @@
-package front_end;
+package front_end.DataManagers;
 
 import backend.FoodService.Food;
 import backend.Seating.Seat;

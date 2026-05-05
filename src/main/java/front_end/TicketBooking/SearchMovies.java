@@ -2,9 +2,9 @@ package front_end.TicketBooking;
 
 import backend.TheaterSchedule.Movie;
 import backend.TheaterSchedule.Showing;
-import front_end.BookingDraft;
 import front_end.IRefreshable;
 import front_end.TheaterFrame;
+import front_end.DataManagers.BookingDraft;
 
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;

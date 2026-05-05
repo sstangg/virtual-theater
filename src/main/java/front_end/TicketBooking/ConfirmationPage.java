@@ -3,8 +3,8 @@ package front_end.TicketBooking;
 import backend.Customer;
 import backend.FoodService.Food;
 import backend.Seating.Seat;
-import front_end.BookingDraft;
 import front_end.TheaterFrame;
+import front_end.DataManagers.BookingDraft;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;

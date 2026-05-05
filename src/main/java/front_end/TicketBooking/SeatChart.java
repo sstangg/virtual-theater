@@ -18,8 +18,8 @@ import javax.swing.BoxLayout;
 
 import backend.Seating.Seat;
 import backend.Seating.SeatType;
-import front_end.BookingDraft;
 import front_end.TheaterFrame;
+import front_end.DataManagers.BookingDraft;
 
 import java.util.ArrayList;
 

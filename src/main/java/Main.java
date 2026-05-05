@@ -1,7 +1,7 @@
 import javax.swing.SwingUtilities;
 
-import front_end.testManager;
 import front_end.TheaterFrame;
+import front_end.DataManagers.testManager;
 
 public class Main {
 

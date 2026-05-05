@@ -7,6 +7,10 @@ import javax.swing.JPanel;
 import java.util.HashMap;
 
 import backend.Customer;
+import front_end.DataManagers.BookingDraft;
+import front_end.DataManagers.testManager;
+import front_end.TheaterTypes.DriveInTheaterPage;
+import front_end.TheaterTypes.OutdoorTheaterPage;
 import front_end.TicketBooking.*;
 
 /*
@@ -19,6 +23,8 @@ public class TheaterFrame extends JFrame {
     public static final String CARD_WELCOME = "welcome";
     public static final String CARD_THEATER_LOBBY = "theaterLobby";
     public static final String CARD_CHOOSE_THEATER_TYPE = "chooseTheaterType";
+    public static final String CARD_OUTDOOR_THEATER = "outdoorTheater";
+    public static final String CARD_DRIVEIN_THEATER = "driveInTheater";
     public static final String CARD_SEARCH_MOVIES = "searchMovies";
     public static final String CARD_SEAT_CHART = "seatChart";
     public static final String CARD_FOOD_SELECTION = "foodSelection";
@@ -43,6 +49,8 @@ public class TheaterFrame extends JFrame {
     private WelcomePanel welcomePanel;
     private TheaterLobby theaterLobbyPanel;
     private ChooseTheaterTypePanel chooseTheaterTypePanel;
+    private OutdoorTheaterPage outdoorTheaterPage;
+    private DriveInTheaterPage driveInTheaterPage;
     private SearchMovies searchMoviesPanel;
     private SeatChart seatChartPanel;
     private FoodSelectionPanel foodSelectionPanel;
@@ -69,6 +77,8 @@ public class TheaterFrame extends JFrame {
         welcomePanel = new WelcomePanel(this);
         theaterLobbyPanel = new TheaterLobby(this);
         chooseTheaterTypePanel = new ChooseTheaterTypePanel(this);
+        outdoorTheaterPage = new OutdoorTheaterPage(this);
+        driveInTheaterPage = new DriveInTheaterPage(this);
         searchMoviesPanel = new SearchMovies(this, searchMovieRows);
         seatChartPanel = new SeatChart(this);
         foodSelectionPanel = new FoodSelectionPanel(this, manager);
@@ -81,6 +91,8 @@ public class TheaterFrame extends JFrame {
                 welcomePanel,
                 theaterLobbyPanel,
                 chooseTheaterTypePanel,
+                outdoorTheaterPage,
+                driveInTheaterPage,
                 searchMoviesPanel,
                 seatChartPanel,
                 foodSelectionPanel,
@@ -92,6 +104,8 @@ public class TheaterFrame extends JFrame {
         cards.add(welcomePanel, CARD_WELCOME);
         cards.add(theaterLobbyPanel, CARD_THEATER_LOBBY);
         cards.add(chooseTheaterTypePanel, CARD_CHOOSE_THEATER_TYPE);
+        cards.add(outdoorTheaterPage, CARD_OUTDOOR_THEATER);
+        cards.add(driveInTheaterPage, CARD_DRIVEIN_THEATER);
         cards.add(searchMoviesPanel, CARD_SEARCH_MOVIES);
         cards.add(seatChartPanel, CARD_SEAT_CHART);
         cards.add(foodSelectionPanel, CARD_FOOD_SELECTION);

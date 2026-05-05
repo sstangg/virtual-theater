@@ -7,7 +7,6 @@ import java.awt.Insets;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
@@ -34,17 +33,11 @@ public class ChooseTheaterTypePanel extends JPanel implements IRefreshable {
 
         JPanel buttonsHolder = new JPanel(new FlowLayout(FlowLayout.CENTER));
         JButton indoorButton = new JButton("Indoor");
-        indoorButton.addActionListener(e -> 
-            System.out.println("Indoor selected")
-        );
+        indoorButton.addActionListener(e -> frame.showCard(TheaterFrame.CARD_SEARCH_MOVIES));
         JButton outdoorButton = new JButton("Outdoor");
-        outdoorButton.addActionListener(e -> 
-            System.out.println("Outdoor selected")
-        );
+        outdoorButton.addActionListener(e -> frame.showCard(TheaterFrame.CARD_OUTDOOR_THEATER));
         JButton driveInButton = new JButton("Drive-In");
-        driveInButton.addActionListener(e -> 
-            System.out.println("Drive-In selected")
-        );
+        driveInButton.addActionListener(e -> frame.showCard(TheaterFrame.CARD_DRIVEIN_THEATER));
         buttonsHolder.add(indoorButton);
         buttonsHolder.add(outdoorButton);
         buttonsHolder.add(driveInButton);
@@ -70,6 +63,11 @@ public class ChooseTheaterTypePanel extends JPanel implements IRefreshable {
 
     @Override
     public void refreshCache() {
+        String userName = frame.getUserName();
+        if (userName == null) {
+            userName = "";
+        }
+        titleLabel.setText("Choose a theater type, " + userName + ":");
     }
 }
 

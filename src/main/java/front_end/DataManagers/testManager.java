@@ -1,4 +1,4 @@
-package front_end;
+package front_end.DataManagers;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -488,6 +488,4 @@ public class testManager {
             e.printStackTrace();
         }
     }
-
-
 }

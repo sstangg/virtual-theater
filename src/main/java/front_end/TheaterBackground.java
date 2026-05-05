@@ -16,7 +16,7 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 /*
- * TheaterBackground is a wrapper that contains the background image, header, and card area sheet with transparency
+ * ThemedShell is a wrapper 
  */
 public final class TheaterBackground extends JPanel {
 
